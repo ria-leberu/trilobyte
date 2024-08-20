@@ -6,6 +6,7 @@ RUN apt-get update \
     && apt-get install -y \
     nano \
     vim \
+    && sudo apt-get install -y ros-humble-demo-nodes-cpp \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -29,16 +30,15 @@ RUN apt-get update \
   && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
   && chmod 0440 /etc/sudoers.d/$USERNAME \
   && rm -rf /var/lib/apt/lists/*
-
+  
 
 # Copy the entrypoint and bashrc scripts so we have 
 # our container's environment set up correctly
 COPY entrypoint.sh /entrypoint.sh
-# COPY bashrc /home/${USERNAME}/.bashrc
+COPY bashrc /home/${USERNAME}/.bashrc
 
 
-# Set up entrypoint and default command
+
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["bash"]
-# Source ROS Environment
-# RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc
+
