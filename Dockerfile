@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop-full
+FROM ros:humble
 
 
 # Example of installing programs
