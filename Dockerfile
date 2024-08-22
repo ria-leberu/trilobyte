@@ -1,22 +1,17 @@
 FROM ros:humble
 
 
-# Example of installing programs
+# installing programs
 RUN apt-get update \
     && apt-get install -y \
     nano \
     vim \
-    && sudo apt-get install -y ros-humble-demo-nodes-cpp \
-    && sudo apt-get install -y lsb-release curl gnupg \
-    && sudo curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null \
-    && sudo apt-get update \
-    && sudo apt-get install -y gz-garden \
+    ros-humble-demo-nodes-cpp \
+    ros-humble-gazebo-ros-pkgs \
     && rm -rf /var/lib/apt/lists/*
 
 
 # Example of copying a file
-# COPY config/ /site_config/
 
 
 # Create a non-root user
