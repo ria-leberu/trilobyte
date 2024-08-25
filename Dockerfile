@@ -1,17 +1,17 @@
 FROM ros:humble
 
 
-# Example of installing programs
+# installing programs
 RUN apt-get update \
     && apt-get install -y \
     nano \
     vim \
-    && sudo apt-get install -y ros-humble-demo-nodes-cpp \
+    ros-humble-demo-nodes-cpp \
+    ros-humble-gazebo-ros-pkgs \
     && rm -rf /var/lib/apt/lists/*
 
 
 # Example of copying a file
-# COPY config/ /site_config/
 
 
 # Create a non-root user

@@ -50,3 +50,13 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# ROS2 Ignore
+.catkin_workspace
+build/
+devel/
+install/
+log/
+recordings/
+output_videos/
+output_data/
