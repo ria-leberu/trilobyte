@@ -7,11 +7,9 @@ RUN apt-get update \
     nano \
     vim \
     ros-humble-demo-nodes-cpp \
-    ros-humble-gazebo-ros-pkgs \
     && rm -rf /var/lib/apt/lists/*
 
 
-# Example of copying a file
 
 
 # Create a non-root user
@@ -31,6 +29,17 @@ RUN apt-get update \
   && chmod 0440 /etc/sudoers.d/$USERNAME \
   && rm -rf /var/lib/apt/lists/*
   
+# Make ROS2 workspace
+RUN mkdir -p home/${USERNAME}/ros2_ws/src
+
+RUN cd home/${USERNAME}/ros2_ws \
+    && colcon build \
+    && . /opt/ros/humble/setup.sh
+
+
+
+# Copy project into docker ROS2 workspace
+
 
 # Copy the entrypoint and bashrc scripts so we have 
 # our container's environment set up correctly
@@ -42,3 +51,7 @@ COPY bashrc /home/${USERNAME}/.bashrc
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["bash"]
 
+COPY trilobyte/ /home/${USERNAME}/ros2_ws/src
+
+# RUN cd home/${USERNAME}/ros2_ws \
+#     && colcon build
