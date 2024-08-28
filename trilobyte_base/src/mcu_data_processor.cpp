@@ -18,6 +18,9 @@
 
 #include "rclcpp/rclcpp.hpp" // ROS 2 C++ client library for node creation and management
 #include "std_msgs/msg/string.hpp" // Standard message type for string messages
+#include <string>
+
+
 
 using namespace std::chrono_literals; // Enables the specification of a time duration
  
@@ -58,10 +61,11 @@ public:
      */
     void timerCallback() 
     {
+       
         // Create a new String message object.
         auto message = std_msgs::msg::String();
-        message.data = "Hello World! " +  std::to_string(count_++);
-         
+        message.data = "Hello World! " ;
+
         // Publish the message
         publisher_->publish(message);
     }
@@ -81,6 +85,7 @@ private:
  */
 int main(int argc, char * argv[])
 {
+
  
   // Initialize ROS 2.
   rclcpp::init(argc, argv); 
