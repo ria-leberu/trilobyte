@@ -37,10 +37,10 @@ COPY trilobyte_base/ /home/${USERNAME}/ros2_ws/src/trilobyte/trilobyte_base/
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash && cd home/ros/ros2_ws && colcon build && source install/setup.bash"
 
 # Install MicroXRCE DDS Agent
-RUN /bin/bash -c "cd home/${USERNAME}/ros2_ws/src/trilobyte/trilobyte_base/dds_agent/Micro-XRCE-DDS-Agent && \
-    mkdir build && cd build && cmake .. && make && make install && sudo ldconfig /usr/local/lib"
+# RUN /bin/bash -c "cd home/${USERNAME}/ros2_ws/src/trilobyte/trilobyte_base/dds_agent/Micro-XRCE-DDS-Agent && \
+#     mkdir build && cd build && cmake .. && make && make install && sudo ldconfig /usr/local/lib"
 
-COPY launch_dds_agent.sh /launch_dds_agent.sh 
+# COPY launch_dds_agent.sh /launch_dds_agent.sh 
 
 RUN usermod -aG dialout ${USERNAME}
 # Copy the entrypoint and bashrc scripts so we have 
