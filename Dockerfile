@@ -26,21 +26,16 @@ RUN apt-get update \
 
 
 # Make ROS2 workspace
-RUN mkdir -p home/${USERNAME}/ros2_ws/src
+RUN mkdir -p home/${USERNAME}/trilobyte_ws/src
 
-RUN cd home/${USERNAME}/ros2_ws \
+RUN cd home/${USERNAME}/trilobyte_ws \
     && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
     && colcon build
 
-COPY trilobyte_base/ /home/${USERNAME}/ros2_ws/src/trilobyte/trilobyte_base/
+COPY trilobyte_base/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_base/
 
-RUN /bin/bash -c "source /opt/ros/humble/setup.bash && cd home/ros/ros2_ws && colcon build && source install/setup.bash"
+RUN /bin/bash -c "source /opt/ros/humble/setup.bash && cd home/ros/trilobyte_ws && colcon build && source install/setup.bash"
 
-# Install MicroXRCE DDS Agent
-# RUN /bin/bash -c "cd home/${USERNAME}/ros2_ws/src/trilobyte/trilobyte_base/dds_agent/Micro-XRCE-DDS-Agent && \
-#     mkdir build && cd build && cmake .. && make && make install && sudo ldconfig /usr/local/lib"
-
-# COPY launch_dds_agent.sh /launch_dds_agent.sh 
 
 RUN usermod -aG dialout ${USERNAME}
 # Copy the entrypoint and bashrc scripts so we have 
