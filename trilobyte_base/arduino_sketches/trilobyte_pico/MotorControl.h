@@ -1,79 +1,61 @@
 #ifndef MotorControl_h
 #define MotorControl_h
 
-class MotorControl
-{
+class MotorControl {
+  uint8_t pin_enable {};
+  uint8_t pin_in1 {};
+  uint8_t pin_in2 {};
+  uint8_t pwm_limit = 255;
 
-  uint8_t pin_enable;
-  uint8_t pin_in_1;
-  uint8_t pin_in_2;
-  
-  uint8_t speed_motor = 0;
-  bool is_clockwise = true;
-  
-  public:
+  uint8_t motor_speed = 0;
+  bool is_offset = false;  // reverse the forward direction of rotation, use if the wiring is reversed
 
-  MotorControl(void)
-  {
-    ;
-  }
 
-  void setupMotor(uint8_t uintEna, uint8_t uintIn1, uint8_t uintIn2)
-  {
-    this->pin_enable = uintEna;
-    this->pin_in_1 = uintIn1;
-    this->pin_in_2 = uintIn2;
-    
-    pinMode(pin_in_1,OUTPUT);
-    pinMode(pin_in_2,OUTPUT);
+public:
 
-    //Serial.println("Setup has occurred");
-    
-  }
+  MotorControl(uint8_t enable, uint8_t in1, uint8_t in2, uint8_t pwm_limit, bool offset=false) {
 
-  void setPWM(uint8_t uintPWM)
-  {
-    analogWrite(pin_enable, uintPWM);
-  }
+    this->pin_enable = enable;
+    this->is_offset = offset;
 
-  bool setClockwise(void)
-  {
-    if(!this->is_clockwise)
-    {
-      this->is_clockwise = true;
+    if (!this->is_offset) {
+      this->pin_in1 = in1;
+      this->pin_in2 = in2;
     }
-    return this->is_clockwise;
+    else {
+      this->pin_in1 = in2;
+      this->pin_in2 = in1;
+    }
+
+    this->pwm_limit = pwm_limit;
+
+    pinMode(this->pin_in1, OUTPUT);
+    pinMode(this->pin_in2, OUTPUT);
+
+    return;
   }
 
-  bool setCounterClockwise(void)
-  {
-    if(this->is_clockwise)
-    {
-      this->is_clockwise = false;
-    }
-    return this->is_clockwise;
-  }
+  void setMotorMotion(uint8_t pwm, bool is_backward) {
 
-  void startMotor(void)
-  {
-    if(this->is_clockwise)
-    {
-      digitalWrite(pin_in_1, HIGH);
-      digitalWrite(pin_in_2, LOW);
+    if (!is_backward) {
+      digitalWrite(this->pin_in1, HIGH);
+      digitalWrite(this->pin_in2, LOW);
+    } 
+    else {
+      digitalWrite(this->pin_in1, LOW);
+      digitalWrite(this->pin_in2, HIGH);
     }
-    else
-    {
-      digitalWrite(pin_in_1, LOW);
-      digitalWrite(pin_in_2, HIGH);
-    }
-  }
 
-  void stopMotor(void)
-  {
-    setPWM(0);
+    if (pwm > this->pwm_limit)
+    {
+      pwm = this->pwm_limit;
+    }
+
+    analogWrite(this->pin_enable, pwm);
+
+    return;
   }
-  
-  
 };
+
 
 #endif
