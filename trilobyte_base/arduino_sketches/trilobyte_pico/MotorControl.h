@@ -5,15 +5,15 @@ class MotorControl {
   uint8_t pin_enable {};
   uint8_t pin_in1 {};
   uint8_t pin_in2 {};
-  uint8_t pwm_limit = 255;
+  uint8_t pwm_limit {255};
 
-  uint8_t motor_speed = 0;
-  bool is_offset = false;  // reverse the forward direction of rotation, use if the wiring is reversed
+  uint8_t motor_speed {0};
+  bool is_offset {false};  // reverse the forward direction of rotation, use if the wiring is reversed
 
 
 public:
 
-  MotorControl(uint8_t enable, uint8_t in1, uint8_t in2, uint8_t pwm_limit, bool offset=false) {
+  MotorControl(uint8_t enable, uint8_t in1, uint8_t in2, uint8_t pwm_limit, bool offset) {
 
     this->pin_enable = enable;
     this->is_offset = offset;
