@@ -1,3 +1,4 @@
+
 /**
 *@file trilobyte_pico.ino
 *
@@ -8,8 +9,17 @@
 *jean@riabuildsthefuture.com
 */
 
-#include <MPU6050.h>  // IMU Library
+#include <Adafruit_NeoPixel.h>
+#include <MyDelay.h>
 #include "MotorControl.h"
+
+
+// NeoPixel Configuration
+constexpr uint8_t NEOPIXEL_PIN = 16;
+Adafruit_NeoPixel status_led(1, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
+uint8_t led_state = 0;
+void statusIndicator(void);
+MyDelay LEDStatus(500, statusIndicator);
 
 // Robot Physical Configuration (in meters)
 constexpr double WHEEL_RADIUS = 0.033;
@@ -28,16 +38,16 @@ H/H/- = BREAK
 
 
 // Left Motor Configuration
-constexpr uint8_t PWMA = 2;
-constexpr uint8_t AIN1 = 3;
-constexpr uint8_t AIN2 = 4;
+constexpr uint8_t PWMA = 13;
+constexpr uint8_t AIN1 = 12;
+constexpr uint8_t AIN2 = 11;
 constexpr uint8_t LEFT_PWM_LIMIT = 200;
 constexpr bool LEFT_MOTOR_OFFSET = false;
 
 // Right Motor Configuration
-constexpr uint8_t PWMB = 5;
-constexpr uint8_t BIN1 = 6;
-constexpr uint8_t BIN2 = 7;
+constexpr uint8_t PWMB = 10;
+constexpr uint8_t BIN1 = 9;
+constexpr uint8_t BIN2 = 8;
 constexpr uint8_t RIGHT_PWM_LIMIT = 200;
 constexpr bool RIGHT_MOTOR_OFFSET = true;
 
@@ -48,17 +58,16 @@ MotorControl RightMotor(PWMB, BIN1, BIN2, RIGHT_PWM_LIMIT, RIGHT_MOTOR_OFFSET);
 constexpr int16_t ENCODER_MIN = -32767;
 constexpr int16_t ENCODER_MAX = 32768;
 
-constexpr uint8_t LEFT_ENCODER_FORWARD = 16;
-constexpr uint8_t RIGHT_ENCODER_FORWARD = {};
+constexpr uint8_t LEFT_ENCODER = 20;
+constexpr uint8_t LEFT_ENCODER_DIR = 1;
 
-constexpr uint8_t LEFT_ENCODER_BACKWARD = 17;
-constexpr uint8_t RIGHT_ENCODER_BACKWARD = {};
+constexpr uint8_t RIGHT_ENCODER = 6;
+constexpr uint8_t RIGHT_ENCODER_DIR = 0;
 
-int16_t g_left_motor_count;
-int16_t g_right_motor_count;
+int16_t g_left_motor_count = 0;
+int16_t g_right_motor_count = 0;
 
-void incrementLeftMotor();
-void decrementLeftMotor();
+void countLeftEncoder(void);
 
 /*
 Serial Communication Configuration
@@ -80,27 +89,47 @@ char g_msg_from_pc[MSG_SIZE];
 bool g_new_data = false;
 
 void rcvWithMarkers(void);
-void showNewData(void);
+void outputDataToPC(void);
 void processCommand(void);
 
 void setup() {
   Serial.begin(115200);
 
-  pinMode(LEFT_ENCODER_FORWARD, INPUT_PULLUP);
+  status_led.begin();
+  // status_led.show();
+  LEDStatus.start();
 
-  pinMode(LEFT_ENCODER_BACKWARD, INPUT_PULLUP);
+  pinMode(LEFT_ENCODER, INPUT_PULLUP);
+  pinMode(LEFT_ENCODER_DIR, INPUT);
+  pinMode(RIGHT_ENCODER, INPUT_PULLUP);
+  pinMode(RIGHT_ENCODER_DIR, INPUT);
 
-  attachInterrupt(digitalPinToInterrupt(LEFT_ENCODER_FORWARD), incrementLeftMotor, RISING);
-  attachInterrupt(digitalPinToInterrupt(LEFT_ENCODER_BACKWARD), decrementLeftMotor, RISING);
-
+  attachInterrupt(digitalPinToInterrupt(LEFT_ENCODER), countLeftEncoder, RISING);
+  attachInterrupt(digitalPinToInterrupt(RIGHT_ENCODER), countRightEncoder, RISING);
 }
 
 void loop() {
 
+  LEDStatus.update();
+
   rcvWithMarkers();
   processCommand();
+  outputDataToPC();
+}
 
-  Serial.println(g_left_motor_count);
+void statusIndicator() {
+  if (led_state == 0) {
+    status_led.setBrightness(16);
+    led_state = 1;
+  } else {
+    status_led.setBrightness(0);
+    led_state = 0;
+  }
+
+  status_led.clear();
+  status_led.setPixelColor(0, 255, 255, 0);
+
+  status_led.show();
 
 }
 
@@ -134,12 +163,20 @@ void rcvWithMarkers() {
   return;
 }
 
-void showNewData() {
-  if (g_new_data) {
+void outputDataToPC() {
 
-    Serial.println(g_msg_rcv_chars);
-    g_new_data = false;
-  }
+  char buffer[14] = { 0 };
+
+  sprintf(buffer, "<%06d%06d>", g_left_motor_count, g_right_motor_count);
+  Serial.println(buffer);
+  // Serial.print("<");
+  // Serial.print(left_buffer);
+  // Serial.print(" ");
+  // Serial.print(right_buffer);
+  // Serial.println(">");
+  // Serial.print(g_left_motor_count);
+
+  // Serial.print(g_right_motor_count);
 }
 
 
@@ -179,22 +216,36 @@ void processCommand() {
   }
 }
 
-void incrementLeftMotor() {
-  if (g_left_motor_count == ENCODER_MAX) {
-    g_left_motor_count = ENCODER_MIN;
+void countLeftEncoder() {
+  uint8_t val = digitalRead(LEFT_ENCODER_DIR);
+  if (val > 0) {
+    if (g_left_motor_count == ENCODER_MAX) {
+      g_left_motor_count = ENCODER_MIN;
+    } else {
+      g_left_motor_count++;
+    }
+  } else {
+    if (g_left_motor_count == ENCODER_MIN) {
+      g_left_motor_count = ENCODER_MAX;
+    } else {
+      g_left_motor_count--;
+    }
   }
-  else {
-    g_left_motor_count++;
-  }
-
 }
 
-void decrementLeftMotor() {
-  if (g_left_motor_count == ENCODER_MIN){
-    g_left_motor_count = ENCODER_MAX;
+void countRightEncoder() {
+  uint8_t val = digitalRead(RIGHT_ENCODER_DIR);
+  if (val > 0) {
+    if (g_right_motor_count == ENCODER_MAX) {
+      g_right_motor_count = ENCODER_MIN;
+    } else {
+      g_right_motor_count++;
+    }
+  } else {
+    if (g_right_motor_count == ENCODER_MIN) {
+      g_right_motor_count = ENCODER_MAX;
+    } else {
+      g_right_motor_count--;
+    }
   }
-  else {
-    g_left_motor_count--;
-  }
-  
 }
