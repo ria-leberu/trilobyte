@@ -5,13 +5,15 @@
   <version>0.0.0</version>
   <description>Interprets and relays data to and from the microcontroller and ROS2 nodes 
   by serial interface.</description>
-  <maintainer email="jean@riabuildsthefuture.com">ria</maintainer>
+  <maintainer email="jean@riabuildsthefuture.com">rialia</maintainer>
   <license>Apache-2.0</license>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
+
+  <depend>rclpy</depend>
 
   <export>
     <build_type>ament_python</build_type>

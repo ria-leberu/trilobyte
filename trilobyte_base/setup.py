@@ -14,12 +14,13 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='rialia',
-    maintainer_email='gene.andrei.nadela@gmail.com',
+    maintainer_email='jean@riabuildsthefuture.com',
     description='TODO: Package description',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'serial_node = trilobyte_base.serial_node:main'
         ],
     },
 )

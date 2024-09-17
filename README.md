@@ -12,5 +12,3 @@ To install, place into your ros2_ws/src folder.
 `docker build -t main .`
 
 `docker run -it --user ros -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env=DISPLAY --network=host --ipc=host -m=8g --device=/dev/ttyACM0 main`
-
-`./launch_dds_agent.sh`
