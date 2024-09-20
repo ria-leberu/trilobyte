@@ -7,7 +7,14 @@ RUN apt-get update \
     vim \
     screen \
     ros-humble-demo-nodes-cpp \
+    python3-pip \
+    # pip install pyserial \
     && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt ./
+
+RUN pip install --no-cache-dir --upgrade pip \
+  && pip install --no-cache-dir -r requirements.txt
 
 # Create a non-root user
 ARG USERNAME=ros
@@ -35,7 +42,10 @@ RUN cd home/${USERNAME}/trilobyte_ws \
 
 COPY trilobyte_base/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_base/
 
-RUN /bin/bash -c "source /opt/ros/humble/setup.bash && cd home/ros/trilobyte_ws && colcon build && source install/setup.bash"
+
+# RUN /bin/bash -c "source /opt/ros/humble/setup.bash && cd home/ros/trilobyte_ws && colcon build && source /home/ros/trilobyte_ws/install/local_setup.bash"
+RUN /bin/bash -c "cd home/ros/trilobyte_ws && colcon build"
+
 
 
 RUN usermod -aG dialout ${USERNAME}
