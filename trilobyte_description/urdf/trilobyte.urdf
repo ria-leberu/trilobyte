@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<robot name="trilobyte">
+    <link name="base_link">
+        <visual>
+        </visual>
+    </link>
+</robot>
