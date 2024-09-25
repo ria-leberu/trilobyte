@@ -8,6 +8,9 @@ RUN apt-get update \
     screen \
     ros-humble-demo-nodes-cpp \
     python3-pip \
+    ros-humble-ament-cmake-clang-format \
+    ros-dev-tools \
+    ros-humble-ament-* \
     # pip install pyserial \
     && rm -rf /var/lib/apt/lists/*
 
@@ -36,15 +39,23 @@ RUN apt-get update \
 # Make ROS2 workspace
 RUN mkdir -p home/${USERNAME}/trilobyte_ws/src
 
+COPY trilobyte_base/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_base/
+COPY trilobyte/ /home/${USERNAME}/trilobyte_ws/src/trilobyte/
+COPY ldlidar_stl_ros2/ /home/${USERNAME}/trilobyte_ws/src/ldlidar_stl_ros2/
+
 RUN cd home/${USERNAME}/trilobyte_ws \
+    # && /bin/bash -c "source /opt/ros/humble/setup.bash" \
+    && . /opt/ros/humble/setup.sh \
     && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
     && colcon build
 
-COPY trilobyte_base/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_base/
+# COPY trilobyte_base/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_base/
+# COPY trilobyte/ /home/${USERNAME}/trilobyte_ws/src/trilobyte/
+# COPY ldlidar_stl_ros2/ /home/${USERNAME}/trilobyte_ws/src/ldlidar_stl_ros2/
 
 
 # RUN /bin/bash -c "source /opt/ros/humble/setup.bash && cd home/ros/trilobyte_ws && colcon build && source /home/ros/trilobyte_ws/install/local_setup.bash"
-RUN /bin/bash -c "cd home/ros/trilobyte_ws && colcon build"
+# RUN /bin/bash -c "cd home/ros/trilobyte_ws && colcon build"
 
 
 
