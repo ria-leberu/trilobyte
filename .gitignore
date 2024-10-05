@@ -51,6 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+.vscode/
+
 # ROS2 Ignore
 .catkin_workspace
 build/
