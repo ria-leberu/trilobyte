@@ -13,7 +13,9 @@ RUN apt-get update \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
     ros-humble-ament-cmake-clang-format \
-    # ros-humble-rviz2 \
+    ros-humble-joint-state-publisher \
+    ros-humble-robot-state-publisher \
+    ros-humble-xacro \
     ros-dev-tools \
     ros-humble-ament-* \
     && rm -rf /var/lib/apt/lists/*
