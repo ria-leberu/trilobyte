@@ -3,7 +3,7 @@
 <package format="3">
   <name>trilobyte_description</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Trilobyte URDF and Meshes</description>
   <maintainer email="jean@riabuildsthefuture.com">rialia</maintainer>
   <license>Apache-2.0</license>
 
@@ -13,7 +13,7 @@
 
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
-  <exec_depend>rviz</exec_depend>
+
   <exec_depend>xacro</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
