@@ -8,16 +8,25 @@
             <!-- {Name_Space}/{Class_Name}-->
           </plugin>
         </hardware>
+
         <joint name="joint_wheel_left">
           <command_interface name="velocity">
-            <!-- <param name="min">{-2*pi}</param>
-            <param name="max">{2*pi}</param> -->
           </command_interface>
-          <!-- additional command interfaces ... -->
+          <state_interface name="position">
+          </state_interface>
           <state_interface name="velocity">
             <param name="initial_value">0.0</param>
           </state_interface>
-          <!-- additional state interfaces ... -->
+        </joint>
+
+        <joint name="joint_wheel_right">
+          <command_interface name="velocity">
+          </command_interface>
+          <state_interface name="position">
+          </state_interface>
+          <state_interface name="velocity">
+            <param name="initial_value">0.0</param>
+          </state_interface>
         </joint>
         <!-- additional joints ...-->
         <!-- additional hardware/sensors ...-->

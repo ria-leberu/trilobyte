@@ -17,10 +17,10 @@ using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface
 
 namespace trilobyte_hardware_interface
 {
-class RRBotSystemPositionOnlyHardware : public hardware_interface::SystemInterface
+class TrilobyteControlSystem : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(RRBotSystemPositionOnlyHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(TrilobyteControlSystem);
 
   CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
 

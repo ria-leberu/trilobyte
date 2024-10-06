@@ -9,11 +9,10 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-#include "pluginlib/class_list_macros.hpp"
 
-namespace my_robot_hardware_interface
+namespace trilobyte_hardware_interface
 {
-    CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
+    CallbackReturn TrilobyteControlSystem::on_init(
     const hardware_interface::HardwareInfo & info) {
 
         if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
@@ -32,7 +31,7 @@ namespace my_robot_hardware_interface
             // RRBotSystemPositionOnly has exactly one state and command interface on each joint
             if (joint.command_interfaces.size() != 1) {
             RCLCPP_FATAL(
-                rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+                rclcpp::get_logger("TrilobyteControlSystem"),
                 "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
                 joint.command_interfaces.size());
             return CallbackReturn::ERROR;
@@ -40,7 +39,7 @@ namespace my_robot_hardware_interface
 
             if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
             RCLCPP_FATAL(
-                rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+                rclcpp::get_logger("TrilobyteControlSystem"),
                 "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
                 joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
             return CallbackReturn::ERROR;
@@ -48,7 +47,7 @@ namespace my_robot_hardware_interface
 
             if (joint.state_interfaces.size() != 1) {
             RCLCPP_FATAL(
-                rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+                rclcpp::get_logger("TrilobyteControlSystem"),
                 "Joint '%s' has %zu state interface. 1 expected.", joint.name.c_str(),
                 joint.state_interfaces.size());
             return CallbackReturn::ERROR;
@@ -56,7 +55,7 @@ namespace my_robot_hardware_interface
 
             if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
             RCLCPP_FATAL(
-                rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+                rclcpp::get_logger("TrilobyteControlSystem"),
                 "Joint '%s' have %s state interface. '%s' expected.", joint.name.c_str(),
                 joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
             return CallbackReturn::ERROR;
@@ -66,19 +65,19 @@ namespace my_robot_hardware_interface
         return CallbackReturn::SUCCESS;
     } // function on_init
     
-    CallbackReturn RRBotSystemPositionOnlyHardware::on_configure(
+    CallbackReturn TrilobyteControlSystem::on_configure(
     const rclcpp_lifecycle::State &previous_state) {
         // START: This part here is for exemplary purposes - Please do not copy to
         // your production code
 
         // prevent unused variable warning
         auto prev_state = previous_state;
-        RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+        RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"),
                     "Configuring ...please wait...");
 
         for (int i = 0; i < hw_start_sec_; i++) {
             rclcpp::sleep_for(std::chrono::seconds(1));
-            RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+            RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"),
                         "%.1f seconds left...", hw_start_sec_ - i);
         }
         // END: This part here is for exemplary purposes - Please do not copy to your
@@ -90,14 +89,14 @@ namespace my_robot_hardware_interface
             hw_commands_[i] = 0;
         }
 
-        RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"),
+        RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"),
                     "Successfully configured!");
 
         return CallbackReturn::SUCCESS;
     }
 
     std::vector<hardware_interface::StateInterface>
-    RRBotSystemPositionOnlyHardware::export_state_interfaces() {
+    TrilobyteControlSystem::export_state_interfaces() {
 
         std::vector<hardware_interface::StateInterface> state_interfaces;
         for (uint i = 0; i < info_.joints.size(); i++) {
@@ -109,7 +108,7 @@ namespace my_robot_hardware_interface
     }
 
     std::vector<hardware_interface::CommandInterface>
-    RRBotSystemPositionOnlyHardware::export_command_interfaces() {
+    TrilobyteControlSystem::export_command_interfaces() {
 
         std::vector<hardware_interface::CommandInterface> command_interfaces;
         for (uint i = 0; i < info_.joints.size(); i++) {
@@ -120,16 +119,16 @@ namespace my_robot_hardware_interface
         return command_interfaces;
     }
 
-    CallbackReturn RRBotSystemPositionOnlyHardware::on_activate(
+    CallbackReturn TrilobyteControlSystem::on_activate(
     const rclcpp_lifecycle::State & /*previous_state*/) {
     // START: This part here is for exemplary purposes - Please do not copy it to your production code
         RCLCPP_INFO(
-            rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Activating ...please wait...");
+            rclcpp::get_logger("TrilobyteControlSystem"), "Activating ...please wait...");
 
         for (int i = 0; i < hw_start_sec_; i++) {
             rclcpp::sleep_for(std::chrono::seconds(1));
             RCLCPP_INFO(
-            rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "%.1f seconds left...",
+            rclcpp::get_logger("TrilobyteControlSystem"), "%.1f seconds left...",
             hw_start_sec_ - i);
         }
         // END: This part here is for exemplary purposes - Please do not copy to your production code
@@ -139,25 +138,25 @@ namespace my_robot_hardware_interface
             hw_commands_[i] = hw_states_[i];
         }
 
-        RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully activated!");
+        RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"), "Successfully activated!");
 
         return CallbackReturn::SUCCESS;
     }
 
-    CallbackReturn RRBotSystemPositionOnlyHardware::on_deactivate(
+    CallbackReturn TrilobyteControlSystem::on_deactivate(
     const rclcpp_lifecycle::State & /*previous_state*/) {
         // START: This part here is for exemplary purposes - Please do not copy to your production code
         RCLCPP_INFO(
-            rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Deactivating ...please wait...");
+            rclcpp::get_logger("TrilobyteControlSystem"), "Deactivating ...please wait...");
 
         for (int i = 0; i < hw_stop_sec_; i++) {
             rclcpp::sleep_for(std::chrono::seconds(1));
             RCLCPP_INFO(
-            rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "%.1f seconds left...",
+            rclcpp::get_logger("TrilobyteControlSystem"), "%.1f seconds left...",
             hw_stop_sec_ - i);
         }
 
-        RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Successfully deactivated!");
+        RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"), "Successfully deactivated!");
         // END: This part here is for exemplary purposes - Please do not copy to your production code
 
         return CallbackReturn::SUCCESS;
@@ -165,33 +164,33 @@ namespace my_robot_hardware_interface
 
     hardware_interface::return_type RRBotSystemPositionOnlyHardware::read() {
         // START: This part here is for exemplary purposes - Please do not copy to your production code
-        RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Reading...");
+        RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"), "Reading...");
 
         for (uint i = 0; i < hw_states_.size(); i++) {
             // Simulate RRBot's movement
             hw_states_[i] = hw_states_[i] + (hw_commands_[i] - hw_states_[i]) / hw_slowdown_;
             RCLCPP_INFO(
-            rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Got state %.5f for joint %d!",
+            rclcpp::get_logger("TrilobyteControlSystem"), "Got state %.5f for joint %d!",
             hw_states_[i], i);
         }
-        RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Joints successfully read!");
+        RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"), "Joints successfully read!");
         // END: This part here is for exemplary purposes - Please do not copy to your production code
 
         return hardware_interface::return_type::OK;
     }
 
-    hardware_interface::return_type RRBotSystemPositionOnlyHardware::write() {
+    hardware_interface::return_type TrilobyteControlSystem::write() {
     // START: This part here is for exemplary purposes - Please do not copy to your production code
-        RCLCPP_INFO(rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Writing...");
+        RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"), "Writing...");
 
         for (uint i = 0; i < hw_commands_.size(); i++) {
             // Simulate sending commands to the hardware
             RCLCPP_INFO(
-            rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Got command %.5f for joint %d!",
+            rclcpp::get_logger("TrilobyteControlSystem"), "Got command %.5f for joint %d!",
             hw_commands_[i], i);
         }
         RCLCPP_INFO(
-            rclcpp::get_logger("RRBotSystemPositionOnlyHardware"), "Joints successfully written!");
+            rclcpp::get_logger("TrilobyteControlSystem"), "Joints successfully written!");
         // END: This part here is for exemplary purposes - Please do not copy to your production code
 
         return hardware_interface::return_type::OK;
@@ -200,6 +199,7 @@ namespace my_robot_hardware_interface
 } // namespace my_robot_hardware_interface
 
 
+#include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  my_robot_hardware_interface::RRBotSystemPositionOnlyHardware, hardware_interface::SystemInterface)
+  my_robot_hardware_interface::TrilobyteControlSystem, hardware_interface::SystemInterface)

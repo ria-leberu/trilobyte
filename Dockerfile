@@ -1,4 +1,6 @@
 FROM ros:humble
+# FROM ros:humble-ros-base-jammy
+
 
 # installing programs
 RUN apt-get update \
@@ -11,6 +13,7 @@ RUN apt-get update \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
     ros-humble-ament-cmake-clang-format \
+    # ros-humble-rviz2 \
     ros-dev-tools \
     ros-humble-ament-* \
     && rm -rf /var/lib/apt/lists/*

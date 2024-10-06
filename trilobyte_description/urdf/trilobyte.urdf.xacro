@@ -13,12 +13,11 @@
     <xacro:property name="wheel_radius" value="0.015" />
     <xacro:property name="caster_wheel_mass" value="0.1" /> <!-- arbitrary value for caster wheel mass -->
     <xacro:property name="caster_wheel_radius" value="0.015" />
-    <xacro:property name="z_offset" value="-${base_height/2}" /> <!-- Space btw top of beam and the each joint -->
 
     <!-- Core Robot Description -->
     <xacro:include filename="trilobyte_core.xacro" />
     <!-- ROS2 Control -->
-    <xacro:include filename="$(find trilobyte_hardware_interface)/ros2_control/trilobyte_ros2_control.xacro" />
+    <xacro:include filename="$(find trilobyte_hardware_interface)/description/trilobyte_ros2_control.xacro" />
     <xacro:trilobyte_ros2_control name="trilobyte" />
 
 
