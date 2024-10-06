@@ -1,0 +1,28 @@
+ <?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="trilobyte_ros2_control" params="name prefix">
+
+    <ros2_control name="${name}" type="system">
+        <hardware>
+          <plugin>
+            <!-- {Name_Space}/{Class_Name}-->
+          </plugin>
+        </hardware>
+        <joint name="joint_wheel_left">
+          <command_interface name="velocity">
+            <!-- <param name="min">{-2*pi}</param>
+            <param name="max">{2*pi}</param> -->
+          </command_interface>
+          <!-- additional command interfaces ... -->
+          <state_interface name="velocity">
+            <param name="initial_value">0.0</param>
+          </state_interface>
+          <!-- additional state interfaces ... -->
+        </joint>
+        <!-- additional joints ...-->
+        <!-- additional hardware/sensors ...-->
+      </ros2_control>
+
+  </xacro:macro>
+
+</robot>
