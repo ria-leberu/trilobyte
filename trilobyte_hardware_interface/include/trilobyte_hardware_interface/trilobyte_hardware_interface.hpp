@@ -20,7 +20,7 @@ namespace trilobyte_hardware_interface
 class TrilobyteControlSystem : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(TrilobyteControlSystem);
+  RCLCPP_SHARED_PTR_DEFINITIONS(TrilobyteControlSystem)
 
   CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
 
@@ -34,9 +34,9 @@ public:
 
   CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
 
-  hardware_interface::return_type read() override;
+  hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  hardware_interface::return_type write() override;
+  hardware_interface::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
   // Parameters for the RRBot simulation
@@ -49,6 +49,6 @@ private:
   std::vector<double> hw_states_;
 };
 
-}  // namespace my_robot_hardware_interface
+}  // namespace trilobyte_hardware_interface
 
 #endif 

@@ -3,7 +3,7 @@
 <package format="3">
   <name>trilobyte_hardware_interface</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>trilobyte control system integration with ROS2 control</description>
   <maintainer email="jean@riabuildsthefuture.com">rialia</maintainer>
   <license>Apache-2.0</license>
 

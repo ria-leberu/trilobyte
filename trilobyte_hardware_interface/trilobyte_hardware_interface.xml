@@ -1,6 +1,6 @@
 <library path="trilobyte_hardware_interface">
-  <class name="trilobyte_hardware_interface/RRBotSystemPositionOnlyHardware"
-         type="trilobyte_hardware_interface::RRBotSystemPositionOnlyHardware"
+  <class name="trilobyte_hardware_interface/TrilobyteControlSystem"
+         type="trilobyte_hardware_interface::TrilobyteControlSystem"
          base_class_type="hardware_interface::SystemInterface">
     <description>
       ros2_control minimal hardware interface template

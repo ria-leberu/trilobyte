@@ -1,4 +1,4 @@
-#include "my_robot_hardware_interface/my_robot_hardware_interface.hpp"
+#include "trilobyte_hardware_interface.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -28,7 +28,6 @@ namespace trilobyte_hardware_interface
         hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
         for (const hardware_interface::ComponentInfo & joint : info_.joints) {
-            // RRBotSystemPositionOnly has exactly one state and command interface on each joint
             if (joint.command_interfaces.size() != 1) {
             RCLCPP_FATAL(
                 rclcpp::get_logger("TrilobyteControlSystem"),
@@ -162,12 +161,11 @@ namespace trilobyte_hardware_interface
         return CallbackReturn::SUCCESS;
     }
 
-    hardware_interface::return_type RRBotSystemPositionOnlyHardware::read() {
+    hardware_interface::return_type TrilobyteControlSystem::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)  {
         // START: This part here is for exemplary purposes - Please do not copy to your production code
         RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"), "Reading...");
 
         for (uint i = 0; i < hw_states_.size(); i++) {
-            // Simulate RRBot's movement
             hw_states_[i] = hw_states_[i] + (hw_commands_[i] - hw_states_[i]) / hw_slowdown_;
             RCLCPP_INFO(
             rclcpp::get_logger("TrilobyteControlSystem"), "Got state %.5f for joint %d!",
@@ -179,7 +177,7 @@ namespace trilobyte_hardware_interface
         return hardware_interface::return_type::OK;
     }
 
-    hardware_interface::return_type TrilobyteControlSystem::write() {
+    hardware_interface::return_type TrilobyteControlSystem::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)  {
     // START: This part here is for exemplary purposes - Please do not copy to your production code
         RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"), "Writing...");
 
@@ -202,4 +200,4 @@ namespace trilobyte_hardware_interface
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  my_robot_hardware_interface::TrilobyteControlSystem, hardware_interface::SystemInterface)
+  trilobyte_hardware_interface::TrilobyteControlSystem, hardware_interface::SystemInterface)
