@@ -34,7 +34,9 @@ public:
 
 private:
   // Parameters for the RRBot simulation
-
+  std::vector<double> hw_commands_;
+  std::vector<double> hw_positions_;
+  std::vector<double> hw_velocities_;
 
   // Store the command for the simulated robot
 

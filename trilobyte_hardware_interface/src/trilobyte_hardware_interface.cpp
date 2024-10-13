@@ -21,11 +21,10 @@ namespace trilobyte_hardware_interface
     if (hardware_interface::SystemInterface::on_init(info) != hardware_interface::CallbackReturn::SUCCESS) {
       return hardware_interface::CallbackReturn::ERROR;
     }
-
-
-    RCLCPP_INFO(rclcpp::get_logger("TrilobyteControlSystem"), "Starting Trilobyte Hardware Control . . . %d", hardware_interface::stod(info_.hardware_parameters["baud_rate"]));
-
-
+    RCLCPP_INFO(
+    rclcpp::get_logger("TrilobyteControlSystem"), 
+    "Starting Trilobyte Hardware Control . . . %f", 
+    hardware_interface::stod(info_.hardware_parameters["baud_rate"]));
 
     return hardware_interface::CallbackReturn::SUCCESS;
     }
@@ -34,7 +33,16 @@ namespace trilobyte_hardware_interface
     // (core method) - returns a list of state interfaces
     std::vector<hardware_interface::StateInterface>
     TrilobyteControlSystem::export_state_interfaces() {
-      std::vector<hardware_interface::StateInterface> state_interfaces;
+
+    std::vector<hardware_interface::StateInterface> state_interfaces;
+
+    for (auto i = 0u; i < info_.joints.size(); i++)
+    {
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+    info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+    info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
+    }
 
     return state_interfaces;
     }
@@ -44,6 +52,12 @@ namespace trilobyte_hardware_interface
     TrilobyteControlSystem::export_command_interfaces() {
 
     std::vector<hardware_interface::CommandInterface> command_interfaces;
+
+    for (auto i = 0u; i < info_.joints.size(); i++)
+    {
+      command_interfaces.emplace_back(hardware_interface::CommandInterface(
+      info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
+    }
 
     return command_interfaces;
     }
