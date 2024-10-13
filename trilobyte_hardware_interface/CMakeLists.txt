@@ -21,7 +21,7 @@ find_package(rclcpp_lifecycle REQUIRED)
 add_library(
   ${PROJECT_NAME}
   SHARED
-  include/trilobyte_hardware_interface/trilobyte_hardware_interface.cpp
+  src/trilobyte_hardware_interface.cpp
 )
 target_include_directories(
   ${PROJECT_NAME}

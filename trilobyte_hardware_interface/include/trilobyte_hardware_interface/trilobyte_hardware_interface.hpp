@@ -13,7 +13,7 @@
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 
-using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+#include "rs232.h"
 
 namespace trilobyte_hardware_interface
 {
@@ -22,31 +22,22 @@ class TrilobyteControlSystem : public hardware_interface::SystemInterface
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(TrilobyteControlSystem)
 
-  CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
 
-  CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
-
+  // Core Methods
+  hardware_interface::CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
-
-  CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
-
-  CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
-
   hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
-
   hardware_interface::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
+
+
 
 private:
   // Parameters for the RRBot simulation
-  double hw_start_sec_;
-  double hw_stop_sec_;
-  double hw_slowdown_;
+
 
   // Store the command for the simulated robot
-  std::vector<double> hw_commands_;
-  std::vector<double> hw_states_;
+
 };
 
 }  // namespace trilobyte_hardware_interface

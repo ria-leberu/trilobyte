@@ -1,18 +1,51 @@
+# WHEEL_RADIUS = 0.030
+# WHEEL_SEPARATION = 0.24
+# VEL_TO_PWM = 278
+# PULSES_PER_REVOLUTION = 138
+# PULSES_PER_METER = 732
+
 # Controller manager configuration
 controller_manager:
   ros__parameters:
-    update_rate: 10  # Hz
+    update_rate: 50  # Hz
 
     ### Controllers to be initialized at startup ###
+    diff_controller:
+      type: diff_drive_controller/DiffDriveController
+
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    forward_position_controller:
-      type: forward_command_controller/ForwardCommandController
+diff_controller:
+  ros__parameters:
+    publish_rate: 50.0
+    left_wheel_names: ['joint_wheel_left']
+    right_wheel_names: ['joint_wheel_right']
+    wheels_per_side: 1
+    wheel_separation: 0.24
+    wheel_radius: 0.03
+    base_frame_id: base_link
+    use_stamped_vel: false
 
-    position_trajectory_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
+    linear.x.has_velocity_limits: false
+    linear.x.has_acceleration_limits: false
+    linear.x.has_jerk_limits: false
+    linear.x.max_velocity: 0.0
+    linear.x.min_velocity: 0.0
+    linear.x.max_acceleration: 0.0
+    linear.x.min_acceleration: 0.0
+    linear.x.max_jerk: 0.0
+    linear.x.min_jerk: 0.0
 
+    angular.z.has_velocity_limits: false
+    angular.z.has_acceleration_limits: false
+    angular.z.has_jerk_limits: false
+    angular.z.max_velocity: 0.0
+    angular.z.min_velocity: 0.0
+    angular.z.max_acceleration: 0.0
+    angular.z.min_acceleration: 0.0
+    angular.z.max_jerk: 0.0
+    angular.z.min_jerk: 0.0
 
 ### Properties of the controllers that we will use and definition of joints to use ###
 # forward_position_controller:
@@ -23,25 +56,25 @@ controller_manager:
 #     interface_name: position
 
 
-position_trajectory_controller:
-  ros__parameters:
-    joints:
-      - joint_wheel_left
-      - joint_wheel_right
+# position_trajectory_controller:
+#   ros__parameters:
+#     joints:
+#       - joint_wheel_left
+#       - joint_wheel_right
 
-    command_interfaces:
-      - velocity
+#     command_interfaces:
+#       - velocity
 
-    state_interfaces:
-      - position
-      - velocity
+#     state_interfaces:
+#       - position
+#       - velocity
 
-    state_publish_rate: 200.0 # Defaults to 50
-    action_monitor_rate: 20.0 # Defaults to 20
+#     state_publish_rate: 200.0 # Defaults to 50
+#     action_monitor_rate: 20.0 # Defaults to 20
 
-    allow_partial_joints_goal: false # Defaults to false
-    open_loop_control: true
-    allow_integration_in_goal_trajectories: true
-    constraints:
-      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
-      goal_time: 0.0 # Defaults to 0.0 (start immediately)
+#     allow_partial_joints_goal: false # Defaults to false
+#     open_loop_control: true
+#     allow_integration_in_goal_trajectories: true
+#     constraints:
+#       stopped_velocity_tolerance: 0.01 # Defaults to 0.01
+#       goal_time: 0.0 # Defaults to 0.0 (start immediately)
