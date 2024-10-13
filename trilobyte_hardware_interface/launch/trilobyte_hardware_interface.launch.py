@@ -56,16 +56,6 @@ def generate_launch_description():
     )
     robot_description = {"robot_description": robot_description_content}
 
-    # rviz_config_file = PathJoinSubstitution(
-    #     [FindPackageShare(description_package), "diffbot/rviz", "rviz_basic_settings.rviz"]
-    # )
-
-    # joint_state_publisher_node = Node(
-    #     package="joint_state_publisher_gui",
-    #     executable="joint_state_publisher_gui",
-    #     condition=IfCondition(gui),
-    # )
-
     robot_controllers = PathJoinSubstitution(
     [
         FindPackageShare("trilobyte_hardware_interface"),
@@ -97,7 +87,6 @@ def generate_launch_description():
 
     nodes = [
         control_node,
-        joint_state_publisher_node,
         robot_state_publisher_node,
     ]
 
