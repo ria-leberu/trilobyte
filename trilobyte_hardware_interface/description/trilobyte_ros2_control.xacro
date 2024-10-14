@@ -11,7 +11,10 @@
             <param name="device">/dev/ttyACM0</param>
             <param name="baud_rate">115200</param>
             <param name="timeout">1000</param>
-            <param name="enc_counts_per_rev">3436</param>
+            <param name="pulses_per_meter">732</param>
+            <param name="pulses_per_revolution">138</param>
+            <param name="wheel_radius">0.03</param>
+            <param name="wheel_separation">0.24</param>
         </hardware>
 
         <joint name="joint_wheel_left">
@@ -33,8 +36,11 @@
         </joint>
         <!-- additional joints ...-->
         <!-- additional hardware/sensors ...-->
+
+
       </ros2_control>
 
   </xacro:macro>
 
 </robot>
+

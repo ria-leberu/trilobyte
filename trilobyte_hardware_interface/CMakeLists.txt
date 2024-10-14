@@ -22,6 +22,8 @@ add_library(
   ${PROJECT_NAME}
   SHARED
   src/trilobyte_hardware_interface.cpp
+  src/mcu_communication.cpp
+  src/rs232.c
 )
 target_include_directories(
   ${PROJECT_NAME}

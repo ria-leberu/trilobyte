@@ -46,35 +46,3 @@ diff_controller:
     angular.z.min_acceleration: 0.0
     angular.z.max_jerk: 0.0
     angular.z.min_jerk: 0.0
-
-### Properties of the controllers that we will use and definition of joints to use ###
-# forward_position_controller:
-#   ros__parameters:
-#     joints:
-#       - joint_wheel_left
-#       - joint_wheel_right
-#     interface_name: position
-
-
-# position_trajectory_controller:
-#   ros__parameters:
-#     joints:
-#       - joint_wheel_left
-#       - joint_wheel_right
-
-#     command_interfaces:
-#       - velocity
-
-#     state_interfaces:
-#       - position
-#       - velocity
-
-#     state_publish_rate: 200.0 # Defaults to 50
-#     action_monitor_rate: 20.0 # Defaults to 20
-
-#     allow_partial_joints_goal: false # Defaults to false
-#     open_loop_control: true
-#     allow_integration_in_goal_trajectories: true
-#     constraints:
-#       stopped_velocity_tolerance: 0.01 # Defaults to 0.01
-#       goal_time: 0.0 # Defaults to 0.0 (start immediately)

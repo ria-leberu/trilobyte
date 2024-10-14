@@ -13,7 +13,7 @@
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 
-#include "rs232.h"
+#include "mcu_communication.h"
 
 namespace trilobyte_hardware_interface
 {
@@ -30,6 +30,7 @@ public:
   hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
   hardware_interface::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  // hardware_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State& previous_state) override;
 
 
 private:
@@ -37,6 +38,22 @@ private:
   std::vector<double> hw_commands_;
   std::vector<double> hw_positions_;
   std::vector<double> hw_velocities_;
+
+  std::string left_wheel_name_;
+  std::string right_wheel_name_;
+  uint16_t loop_rate_;
+  std::string device_name_;
+  uint16_t baud_rate_;
+  uint16_t timeout_ms_;
+  uint16_t pulses_per_meter_;
+  uint16_t pulses_per_revolution_;
+  double wheel_radius_;
+  double wheel_separation_;
+
+
+
+
+  MCUCommunication mcu;
 
   // Store the command for the simulated robot
 

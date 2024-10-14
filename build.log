@@ -2,62 +2,62 @@
 
 #1 [internal] load build definition from Dockerfile
 #1 transferring dockerfile: 2.08kB done
-#1 DONE 0.0s
+#1 DONE 0.1s
 
 #2 [internal] load metadata for docker.io/library/ros:humble
 #2 DONE 0.5s
 
 #3 [internal] load .dockerignore
 #3 transferring context: 2B done
-#3 DONE 0.0s
+#3 DONE 0.1s
 
 #4 [ 1/16] FROM docker.io/library/ros:humble@sha256:482ae18aa5d4813dd5c59aee9e4cd830eac94c60587f494e9ff343e6aaf3aba3
 #4 DONE 0.0s
 
 #5 [internal] load build context
-#5 transferring context: 8.45kB done
+#5 transferring context: 8.46kB done
 #5 DONE 0.1s
 
-#6 [12/16] COPY ldlidar_stl_ros2/ /home/ros/trilobyte_ws/src/ldlidar_stl_ros2/
+#6 [ 5/16] RUN groupadd --gid 1000 ros   && useradd -s /bin/bash --uid 1000 --gid 1000 -m ros   && mkdir /home/ros/.config && chown 1000:1000 /home/ros/.config
 #6 CACHED
 
-#7 [ 3/16] COPY requirements.txt ./
+#7 [12/16] COPY ldlidar_stl_ros2/ /home/ros/trilobyte_ws/src/ldlidar_stl_ros2/
 #7 CACHED
 
-#8 [10/16] COPY trilobyte_hardware_interface/ /home/ros/trilobyte_ws/src/trilobyte_hardware_interface/
+#8 [14/16] RUN usermod -aG dialout ros
 #8 CACHED
 
-#9 [13/16] RUN cd home/ros/trilobyte_ws     && . /opt/ros/humble/setup.sh     && rosdep install --from-paths src --ignore-src --rosdistro humble -y     && colcon build
+#9 [11/16] COPY trilobyte/ /home/ros/trilobyte_ws/src/trilobyte/
 #9 CACHED
 
-#10 [ 7/16] RUN mkdir -p home/ros/trilobyte_ws/src
+#10 [10/16] COPY trilobyte_hardware_interface/ /home/ros/trilobyte_ws/src/trilobyte_hardware_interface/
 #10 CACHED
 
-#11 [ 9/16] COPY trilobyte_description/ /home/ros/trilobyte_ws/src/trilobyte_description/
+#11 [ 4/16] RUN pip install --no-cache-dir --upgrade pip   && pip install --no-cache-dir -r requirements.txt
 #11 CACHED
 
-#12 [14/16] RUN usermod -aG dialout ros
+#12 [ 9/16] COPY trilobyte_description/ /home/ros/trilobyte_ws/src/trilobyte_description/
 #12 CACHED
 
-#13 [ 6/16] RUN apt-get update   && apt-get install -y sudo   && echo ros ALL=(root) NOPASSWD:ALL > /etc/sudoers.d/ros  && chmod 0440 /etc/sudoers.d/ros   && rm -rf /var/lib/apt/lists/*
+#13 [ 8/16] COPY trilobyte_base/ /home/ros/trilobyte_ws/src/trilobyte_base/
 #13 CACHED
 
-#14 [ 8/16] COPY trilobyte_base/ /home/ros/trilobyte_ws/src/trilobyte_base/
+#14 [ 2/16] RUN apt-get update     && apt-get install -y     nano     vim     screen     python3-pip     ros-humble-demo-nodes-cpp     ros-humble-ros2-control     ros-humble-ros2-controllers     ros-humble-ament-cmake-clang-format     ros-humble-joint-state-publisher     ros-humble-robot-state-publisher     ros-humble-xacro     ros-dev-tools     ros-humble-ament-*     && rm -rf /var/lib/apt/lists/*
 #14 CACHED
 
 #15 [15/16] COPY entrypoint.sh /entrypoint.sh
 #15 CACHED
 
-#16 [11/16] COPY trilobyte/ /home/ros/trilobyte_ws/src/trilobyte/
+#16 [ 3/16] COPY requirements.txt ./
 #16 CACHED
 
-#17 [ 5/16] RUN groupadd --gid 1000 ros   && useradd -s /bin/bash --uid 1000 --gid 1000 -m ros   && mkdir /home/ros/.config && chown 1000:1000 /home/ros/.config
+#17 [13/16] RUN cd home/ros/trilobyte_ws     && . /opt/ros/humble/setup.sh     && rosdep install --from-paths src --ignore-src --rosdistro humble -y     && colcon build
 #17 CACHED
 
-#18 [ 2/16] RUN apt-get update     && apt-get install -y     nano     vim     screen     python3-pip     ros-humble-demo-nodes-cpp     ros-humble-ros2-control     ros-humble-ros2-controllers     ros-humble-ament-cmake-clang-format     ros-humble-joint-state-publisher     ros-humble-robot-state-publisher     ros-humble-xacro     ros-dev-tools     ros-humble-ament-*     && rm -rf /var/lib/apt/lists/*
+#18 [ 7/16] RUN mkdir -p home/ros/trilobyte_ws/src
 #18 CACHED
 
-#19 [ 4/16] RUN pip install --no-cache-dir --upgrade pip   && pip install --no-cache-dir -r requirements.txt
+#19 [ 6/16] RUN apt-get update   && apt-get install -y sudo   && echo ros ALL=(root) NOPASSWD:ALL > /etc/sudoers.d/ros  && chmod 0440 /etc/sudoers.d/ros   && rm -rf /var/lib/apt/lists/*
 #19 CACHED
 
 #20 [16/16] COPY bashrc /home/ros/.bashrc
@@ -65,5 +65,5 @@
 
 #21 exporting to image
 #21 exporting layers done
-#21 writing image sha256:d5c2844018bf928998e69cef18f957fe54ae23ff027756ec0682cfb42aac406b 0.0s done
+#21 writing image sha256:5a5131a35a2333100921efa49d02355089bcb3dfd41bb41bdc4d42d7e7d3a06e 0.0s done
 #21 DONE 0.1s
