@@ -39,6 +39,15 @@ private:
   std::vector<double> hw_positions_;
   std::vector<double> hw_velocities_;
 
+  double left_position_ = 0;
+  double right_position_ = 0;
+  double left_velocity_ = 0;
+  double right_velocity_ = 0;
+
+
+  double left_command_ = 0;
+  double right_command_ = 0;
+
   std::string left_wheel_name_;
   std::string right_wheel_name_;
   uint16_t loop_rate_;

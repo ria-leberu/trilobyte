@@ -48,13 +48,25 @@ namespace trilobyte_hardware_interface
 
   std::vector<hardware_interface::StateInterface> state_interfaces;
 
-  for (auto i = 0u; i < info_.joints.size(); i++)
-  {
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
+  info_.joints[0].name, hardware_interface::HW_IF_POSITION, &left_position_));
+
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
-  }
+  info_.joints[1].name, hardware_interface::HW_IF_POSITION, &right_position_));
+
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+  info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &left_velocity_));
+
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+  info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &right_velocity_));
+
+  // for (auto i = 0u; i < info_.joints.size(); i++)
+  // {
+  //   state_interfaces.emplace_back(hardware_interface::StateInterface(
+  //   info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
+  //   state_interfaces.emplace_back(hardware_interface::StateInterface(
+  //   info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
+  // }
 
   return state_interfaces;
   }
@@ -65,11 +77,17 @@ namespace trilobyte_hardware_interface
 
   std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-  for (auto i = 0u; i < info_.joints.size(); i++)
-  {
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-    info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
-  }
+  // for (auto i = 0u; i < info_.joints.size(); i++)
+  // {
+  //   command_interfaces.emplace_back(hardware_interface::CommandInterface(
+  //   info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
+  // }
+
+  command_interfaces.emplace_back(hardware_interface::CommandInterface(
+    info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &left_command_));
+
+  command_interfaces.emplace_back(hardware_interface::CommandInterface(
+    info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &right_command_));
 
   return command_interfaces;
   }
@@ -87,6 +105,9 @@ namespace trilobyte_hardware_interface
   hardware_interface::return_type TrilobyteControlSystem::write(
   const rclcpp::Time& /*time*/, 
   const rclcpp::Duration& /*period*/)  {
+  RCLCPP_INFO(
+  rclcpp::get_logger("TrilobyteControlSystem"), "Command Value: %.5f", left_command_);
+
 
   return hardware_interface::return_type::OK;
   }
