@@ -25,9 +25,6 @@ namespace trilobyte_hardware_interface
 
     RCLCPP_INFO(
     rclcpp::get_logger("TrilobyteControlSystem"), "Starting Trilobyte Hardware Control . . . ");
-
-    this->left_wheel_name_ = info_.hardware_parameters["left_wheel_name"];
-    std::cout << "left wheel == " << this->left_wheel_name_ << "\n";
   // std::string right_wheel_name_;
   // uint16_t loop_rate_;
   // std::string device_name_;
@@ -52,21 +49,13 @@ namespace trilobyte_hardware_interface
   info_.joints[0].name, hardware_interface::HW_IF_POSITION, &left_position_));
 
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  info_.joints[1].name, hardware_interface::HW_IF_POSITION, &right_position_));
-
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
   info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &left_velocity_));
 
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &right_velocity_));
+  info_.joints[1].name, hardware_interface::HW_IF_POSITION, &right_position_));
 
-  // for (auto i = 0u; i < info_.joints.size(); i++)
-  // {
-  //   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  //   info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
-  //   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  //   info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
-  // }
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+  info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &right_velocity_));
 
   return state_interfaces;
   }
@@ -76,12 +65,6 @@ namespace trilobyte_hardware_interface
   TrilobyteControlSystem::export_command_interfaces() {
 
   std::vector<hardware_interface::CommandInterface> command_interfaces;
-
-  // for (auto i = 0u; i < info_.joints.size(); i++)
-  // {
-  //   command_interfaces.emplace_back(hardware_interface::CommandInterface(
-  //   info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
-  // }
 
   command_interfaces.emplace_back(hardware_interface::CommandInterface(
     info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &left_command_));
@@ -101,13 +84,22 @@ namespace trilobyte_hardware_interface
   }
 
   // write (core method) - updates the data values of the command_interfaces
-
   hardware_interface::return_type TrilobyteControlSystem::write(
   const rclcpp::Time& /*time*/, 
   const rclcpp::Duration& /*period*/)  {
-  RCLCPP_INFO(
-  rclcpp::get_logger("TrilobyteControlSystem"), "Command Value: %.5f", left_command_);
 
+  // command is in rads per sec
+  
+  int16_t left_pwm = left_command_* 0.03 * 278;
+  int16_t right_pwm = right_command_ * 0.03 * 278;
+
+  RCLCPP_INFO(
+  rclcpp::get_logger("TrilobyteControlSystem"), 
+  "LeftValue: %d RightValue: %d", 
+  left_pwm, right_pwm);
+
+
+  mcu.sendMotorCommand(left_pwm, right_pwm);
 
   return hardware_interface::return_type::OK;
   }

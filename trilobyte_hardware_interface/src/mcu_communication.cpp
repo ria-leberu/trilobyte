@@ -10,6 +10,15 @@ MCUCommunication::MCUCommunication(uint8_t serial_device_id_number, uint32_t bau
     return;
 }
 
+MCUCommunication::~MCUCommunication() {
+
+    sendMotorCommand(0, 0);
+    RS232_CloseComport(this->serial_device_id_number);
+
+}
+
+    
+
 void MCUCommunication::sendMotorCommand(int16_t pwm_left_motor, int16_t pwm_right_motor) {
     // char buffer[10] = {0};
 
@@ -18,14 +27,13 @@ void MCUCommunication::sendMotorCommand(int16_t pwm_left_motor, int16_t pwm_righ
     std::string buffer = this->LEFT_MARKER + MCUCommunication::pwmToString(pwm_left_motor) +
     MCUCommunication::pwmToString(pwm_right_motor) + this->RIGHT_MARKER;
 
-    std::cout << buffer << std::endl;
-
-
     if(RS232_OpenComport(this->serial_device_id_number, this->baud_rate, this->MODE, 0))
     {
     printf("Can not open comport\n");
     
     }
+
+    usleep(100000);
 
     // printf(buffer.c_str());
     // RCLCPP_INFO(
@@ -62,6 +70,9 @@ std::string MCUCommunication::pwmToString(int16_t pwm_value) {
     return pwm_command;
 }
 
+// void closeComport(void) {
+//     RS232_CloseComport()
+// }
 
 // void MCUCommunication::moveForward(void) {
 

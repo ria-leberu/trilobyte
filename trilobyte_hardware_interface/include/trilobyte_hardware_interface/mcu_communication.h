@@ -16,11 +16,15 @@ class MCUCommunication {
         MCUCommunication()
         {};
 
+        ~MCUCommunication();
+
         MCUCommunication(uint8_t serial_device_id_number, uint32_t baud_rate, uint16_t timeout_ms);
 
         void moveForward(void);
 
         void sendMotorCommand(int16_t pwm_left_motor, int16_t pwm_right_motor);
+
+        void closeComport();
 
     private:
 

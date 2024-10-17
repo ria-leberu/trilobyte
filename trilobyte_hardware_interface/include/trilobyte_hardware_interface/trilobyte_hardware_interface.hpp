@@ -32,12 +32,7 @@ public:
 
   // hardware_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State& previous_state) override;
 
-
 private:
-  // Parameters for the RRBot simulation
-  std::vector<double> hw_commands_;
-  std::vector<double> hw_positions_;
-  std::vector<double> hw_velocities_;
 
   double left_position_ = 0;
   double right_position_ = 0;
