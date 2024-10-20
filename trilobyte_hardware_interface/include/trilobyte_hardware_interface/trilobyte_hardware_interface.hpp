@@ -31,14 +31,17 @@ public:
   hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
   hardware_interface::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-  // hardware_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State& previous_state) override;
+  double left_position_ = 0.0;
+  double right_position_ = 0.0;
+  double left_velocity_ = 0.0;
+  double right_velocity_ = 0.0;
+
+  int prev_left_encoder_ticks_ = 0;
+  int prev_right_encoder_ticks_ = 0;
 
 private:
 
-  double left_position_ = 0;
-  double right_position_ = 0;
-  double left_velocity_ = 0;
-  double right_velocity_ = 0;
+
 
 //diff_controller outputs in radians/sec
   double left_command_ = 0;

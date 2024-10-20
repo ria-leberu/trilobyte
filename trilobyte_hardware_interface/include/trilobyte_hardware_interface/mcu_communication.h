@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iomanip> 
 #include <chrono>
+#include <array>
 
 // #include "rs232.h"
 #include "serial/serial.h"
@@ -27,7 +28,7 @@ class MCUCommunication {
 
         void send_motor_command(int16_t pwm_left_motor, int16_t pwm_right_motor);
 
-        void read_encoder_values(void);
+        std::array<int,2> read_encoder_values(void);
 
         void update_wheel_positions(void);
 

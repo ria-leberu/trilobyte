@@ -30,7 +30,9 @@ void MCUCommunication::send_motor_command(int16_t pwm_left_motor, int16_t pwm_ri
 
 }
 
-void MCUCommunication::read_encoder_values(void) {
+std::array<int,2> MCUCommunication::read_encoder_values(void) {
+
+    std::array<int,2> output_encoder;
 
     _serial_conn.flushInput();
 
@@ -41,8 +43,10 @@ void MCUCommunication::read_encoder_values(void) {
     std::string left_enc_str = this->_response.substr(1,6);
     std::string right_enc_str = this->_response.substr(7,6);
 
-    this->encoder_left = std::atoi(left_enc_str.c_str());
-    this->encoder_right = std::atoi(right_enc_str.c_str());
+    output_encoder[0] = std::atoi(left_enc_str.c_str());
+    output_encoder[1] = std::atoi(right_enc_str.c_str());
+
+    return output_encoder;
 
 }
 

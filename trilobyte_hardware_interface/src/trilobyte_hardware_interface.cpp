@@ -41,16 +41,16 @@ namespace trilobyte_hardware_interface
   std::vector<hardware_interface::StateInterface> state_interfaces;
 
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  info_.joints[0].name, hardware_interface::HW_IF_POSITION, &_mcu.pos_wheel_left));
+  info_.joints[0].name, hardware_interface::HW_IF_POSITION, &left_position_));
 
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &_mcu.vel_wheel_left));
+  info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &left_velocity_));
 
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  info_.joints[1].name, hardware_interface::HW_IF_POSITION, &_mcu.pos_wheel_right));
+  info_.joints[1].name, hardware_interface::HW_IF_POSITION, &right_position_));
 
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-  info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &_mcu.vel_wheel_right));
+  info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &right_velocity_));
 
   return state_interfaces;
   }
@@ -73,30 +73,46 @@ namespace trilobyte_hardware_interface
   // read (core method) - updates the data values of the state_interfaces
   hardware_interface::return_type TrilobyteControlSystem::read(
   const rclcpp::Time& /*time*/, 
-  const rclcpp::Duration& /*period*/) {
+  const rclcpp::Duration& period) {
 
-  auto time_current = std::chrono::system_clock::now();
-  std::chrono::duration<double> diff = time_current - _mcu.time_previous;
-  double diff_seconds = diff.count();
-  _mcu.time_previous = time_current;
+  std::array<int,2> output_encoder = _mcu.read_encoder_values();
+  int left_encoder_ticks = output_encoder[0];
+  int right_encoder_ticks = output_encoder[1];
 
-  _mcu.read_encoder_values();
+  double dt = period.seconds();
 
-  double pos_previous_left = _mcu.pos_wheel_left;
-  double pos_previous_right = _mcu.pos_wheel_right;
-  _mcu.update_wheel_positions();
-  _mcu.vel_wheel_left = (_mcu.pos_wheel_left - pos_previous_left) / diff_seconds;
-  _mcu.vel_wheel_right = (_mcu.pos_wheel_right - pos_previous_right) / diff_seconds;
+  left_position_ += (left_encoder_ticks - prev_left_encoder_ticks_) * (2 * PI_VALUE / 138);
+  right_position_ += (right_encoder_ticks - prev_right_encoder_ticks_) * (2 * PI_VALUE / 138);
 
-  // RCLCPP_INFO(
-  // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "left: %f right: %f", 
-  // _mcu.vel_wheel_left, _mcu.vel_wheel_right);
+  left_velocity_ = ((left_encoder_ticks - prev_left_encoder_ticks_) * (2 * PI_VALUE / 138)) / dt;
+  right_velocity_ = ((right_encoder_ticks - prev_right_encoder_ticks_) * (2 * PI_VALUE / 138)) / dt;
+
+  // Store current encoder values for next cycle
+  prev_left_encoder_ticks_ = left_encoder_ticks;
+  prev_right_encoder_ticks_ = right_encoder_ticks;
+
+  // auto time_current = std::chrono::system_clock::now();
+  // std::chrono::duration<double> diff = time_current - _mcu.time_previous;
+  // double diff_seconds = diff.count();
+  // _mcu.time_previous = time_current;
+
+  
+
+  // double pos_previous_left = _mcu.pos_wheel_left;
+  // double pos_previous_right = _mcu.pos_wheel_right;
+  // _mcu.update_wheel_positions();
+  // _mcu.vel_wheel_left = (_mcu.pos_wheel_left - pos_previous_left) / diff_seconds;
+  // _mcu.vel_wheel_right = (_mcu.pos_wheel_right - pos_previous_right) / diff_seconds;
 
   RCLCPP_INFO(
   rclcpp::get_logger("TrilobyteControlSystem"), 
-  "left: %d right: %d", 
-  _mcu.encoder_left, _mcu.encoder_right);
+  "left: %f right: %f", 
+  left_velocity_, right_velocity_);
+
+  // RCLCPP_INFO(
+  // rclcpp::get_logger("TrilobyteControlSystem"), 
+  // "left: %d right: %d", 
+  // left_encoder_ticks, right_encoder_ticks);
 
   // RCLCPP_INFO(
   // rclcpp::get_logger("TrilobyteControlSystem"), 
