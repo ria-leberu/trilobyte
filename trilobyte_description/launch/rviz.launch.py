@@ -72,11 +72,11 @@ def generate_launch_description():
     name='joint_state_publisher')
 
   # A GUI to manipulate the joint state values
-  start_joint_state_publisher_gui_node = Node(
-    condition=IfCondition(gui),
-    package='joint_state_publisher_gui',
-    executable='joint_state_publisher_gui',
-    name='joint_state_publisher_gui')
+  # start_joint_state_publisher_gui_node = Node(
+  #   condition=IfCondition(gui),
+  #   package='joint_state_publisher_gui',
+  #   executable='joint_state_publisher_gui',
+  #   name='joint_state_publisher_gui')
 
   # Subscribe to the joint states of the robot, and publish the 3D pose of each link.
   start_robot_state_publisher_cmd = Node(
@@ -109,7 +109,7 @@ def generate_launch_description():
 
   # Add any actions
   ld.add_action(start_joint_state_publisher_cmd)
-  ld.add_action(start_joint_state_publisher_gui_node)
+  # ld.add_action(start_joint_state_publisher_gui_node)
   ld.add_action(start_robot_state_publisher_cmd)
   ld.add_action(start_rviz_cmd)
 
