@@ -1,69 +1,21 @@
 #0 building with "default" instance using docker driver
 
 #1 [internal] load build definition from Dockerfile
-#1 transferring dockerfile: 2.08kB done
+#1 transferring dockerfile: 2.16kB done
 #1 DONE 0.1s
 
 #2 [internal] load metadata for docker.io/library/ros:humble
-#2 DONE 0.7s
+#2 DONE 0.5s
 
 #3 [internal] load .dockerignore
 #3 transferring context: 2B done
-#3 DONE 0.2s
+#3 DONE 0.0s
 
 #4 [ 1/16] FROM docker.io/library/ros:humble@sha256:482ae18aa5d4813dd5c59aee9e4cd830eac94c60587f494e9ff343e6aaf3aba3
-#4 DONE 0.0s
+#4 CACHED
 
 #5 [internal] load build context
-#5 transferring context: 8.46kB done
+#5 transferring context: 13.66kB done
 #5 DONE 0.1s
 
-#6 [12/16] COPY ldlidar_stl_ros2/ /home/ros/trilobyte_ws/src/ldlidar_stl_ros2/
-#6 CACHED
-
-#7 [ 8/16] COPY trilobyte_base/ /home/ros/trilobyte_ws/src/trilobyte_base/
-#7 CACHED
-
-#8 [14/16] RUN usermod -aG dialout ros
-#8 CACHED
-
-#9 [ 3/16] COPY requirements.txt ./
-#9 CACHED
-
-#10 [ 9/16] COPY trilobyte_description/ /home/ros/trilobyte_ws/src/trilobyte_description/
-#10 CACHED
-
-#11 [ 5/16] RUN groupadd --gid 1000 ros   && useradd -s /bin/bash --uid 1000 --gid 1000 -m ros   && mkdir /home/ros/.config && chown 1000:1000 /home/ros/.config
-#11 CACHED
-
-#12 [10/16] COPY trilobyte_hardware_interface/ /home/ros/trilobyte_ws/src/trilobyte_hardware_interface/
-#12 CACHED
-
-#13 [ 7/16] RUN mkdir -p home/ros/trilobyte_ws/src
-#13 CACHED
-
-#14 [ 2/16] RUN apt-get update     && apt-get install -y     nano     vim     screen     python3-pip     ros-humble-demo-nodes-cpp     ros-humble-ros2-control     ros-humble-ros2-controllers     ros-humble-ament-cmake-clang-format     ros-humble-joint-state-publisher     ros-humble-robot-state-publisher     ros-humble-xacro     ros-dev-tools     ros-humble-ament-*     && rm -rf /var/lib/apt/lists/*
-#14 CACHED
-
-#15 [ 4/16] RUN pip install --no-cache-dir --upgrade pip   && pip install --no-cache-dir -r requirements.txt
-#15 CACHED
-
-#16 [ 6/16] RUN apt-get update   && apt-get install -y sudo   && echo ros ALL=(root) NOPASSWD:ALL > /etc/sudoers.d/ros  && chmod 0440 /etc/sudoers.d/ros   && rm -rf /var/lib/apt/lists/*
-#16 CACHED
-
-#17 [13/16] RUN cd home/ros/trilobyte_ws     && . /opt/ros/humble/setup.sh     && rosdep install --from-paths src --ignore-src --rosdistro humble -y     && colcon build
-#17 CACHED
-
-#18 [11/16] COPY trilobyte/ /home/ros/trilobyte_ws/src/trilobyte/
-#18 CACHED
-
-#19 [15/16] COPY entrypoint.sh /entrypoint.sh
-#19 CACHED
-
-#20 [16/16] COPY bashrc /home/ros/.bashrc
-#20 CACHED
-
-#21 exporting to image
-#21 exporting layers done
-#21 writing image sha256:220c80731d5b4e10b664bd9909815e789677fffeb33c78e2e0ecff047dfd1ddd 0.0s done
-#21 DONE 0.1s
+#6 [ 2/16] RUN apt-get update     && apt-get install -y     nano     vim     screen     python3-pip     libboost-all-dev     ros-humble-demo-nodes-cpp     ros-humble-ros2-control     ros-humble-ros2-controllers     ros-humble-ament-cmake-clang-format     ros-humble-joint-state-publisher     ros-humble-robot-state-publisher     ros-humble-xacro     ros-dev-tools     ros-humble-ament-*     && rm -rf /var/lib/apt/lists/*

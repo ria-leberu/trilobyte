@@ -1,59 +1,55 @@
 #include "trilobyte_hardware_interface/mcu_communication.h"
 
 
-MCUCommunication::MCUCommunication(uint8_t serial_device_id_number, uint32_t baud_rate, uint16_t timeout_ms) {
-
-    this->serial_device_id_number = serial_device_id_number;
-    this->baud_rate = baud_rate;
-    this->timeout_ms = timeout_ms;
+MCUCommunication::MCUCommunication() {
 
     return;
 }
 
 MCUCommunication::~MCUCommunication() {
 
-    sendMotorCommand(0, 0);
-    RS232_CloseComport(this->serial_device_id_number);
+    _serial_conn.close();
+}
+
+void MCUCommunication::configure(std::string serial_device_, uint32_t baud_rate, uint16_t timeout_ms) {
+    this->_serial_conn.setPort(serial_device_);
+    this->_serial_conn.setBaudrate(baud_rate);
+    serial::Timeout tt = serial::Timeout::simpleTimeout(timeout_ms);
+    this->_serial_conn.setTimeout(tt);
+    this->_serial_conn.open();
+    
+}
+
+void MCUCommunication::send_motor_command(int16_t pwm_left_motor, int16_t pwm_right_motor) {
+
+    std::string buffer = this->LEFT_MARKER + MCUCommunication::_convert_pwm_to_string(pwm_left_motor) +
+    MCUCommunication::_convert_pwm_to_string(pwm_right_motor) + this->RIGHT_MARKER;
+
+    _serial_conn.flushOutput();
+    _serial_conn.write(buffer);
 
 }
 
-    
+void MCUCommunication::read_encoder_values(void) {
 
-void MCUCommunication::sendMotorCommand(int16_t pwm_left_motor, int16_t pwm_right_motor) {
-    // char buffer[10] = {0};
+    _serial_conn.flushInput();
 
-    // std::string buffer;
-
-    std::string buffer = this->LEFT_MARKER + MCUCommunication::pwmToString(pwm_left_motor) +
-    MCUCommunication::pwmToString(pwm_right_motor) + this->RIGHT_MARKER;
-
-    if(RS232_OpenComport(this->serial_device_id_number, this->baud_rate, this->MODE, 0))
-    {
-    printf("Can not open comport\n");
-    
+    if (_serial_conn.readline().size() > 0) {
+        this->_response = _serial_conn.readline();
     }
 
-    usleep(100000);
+    std::string left_enc_str = this->_response.substr(1,6);
+    std::string right_enc_str = this->_response.substr(7,6);
 
-    // printf(buffer.c_str());
-    // RCLCPP_INFO(
-    // rclcpp::get_logger("TrilobyteControlSystem"), 
-    // "String sent to MCU: %s", 
-    // buffer.c_str());
-
-    RS232_cputs(this->serial_device_id_number, buffer.c_str());
-
-    RS232_CloseComport(this->serial_device_id_number);
-    // buffer[0] = this->LEFT_MARKER;
-    // buffer[9] = this->RIGHT_MARKER;
+    this->encoder_left = std::atoi(left_enc_str.c_str());
+    this->encoder_right = std::atoi(right_enc_str.c_str());
 
 }
 
-std::string MCUCommunication::pwmToString(int16_t pwm_value) {
+std::string MCUCommunication::_convert_pwm_to_string(int16_t pwm_value) {
     
     std::string pwm_command;
     std::string direction = "f";
-    // char buffer[3] = {0};
     std::ostringstream oss;
 
     if (pwm_value < 0) {
@@ -62,46 +58,16 @@ std::string MCUCommunication::pwmToString(int16_t pwm_value) {
     }
 
     oss << std::setw(3) << std::setfill('0') << pwm_value;
-    // sprintf(buffer, "%03d", pwm_value);
     pwm_command = direction + oss.str();
-
-    // std::cout << pwm_command << "\n";
 
     return pwm_command;
 }
 
-// void closeComport(void) {
-//     RS232_CloseComport()
-// }
+void MCUCommunication::update_wheel_positions(void) {
 
-// void MCUCommunication::moveForward(void) {
-
-//       int cport_nr=24;
-//   int bdrate=115200; /* 9600 baud */
- 
-//   char mode[]={'8','N','1',0}; // 8 data bits, no parity, 1 stop bit
-//   char str_send[3][128]; // send data buffer
-// //   unsigned char str_recv[BUF_SIZE]; // recv data buffer
-//   strcpy(str_send[0], "<f100f100>");
-//   strcpy(str_send[1], "<b100b100>");
-//   strcpy(str_send[2], "<f000f000>");
-  
-//   if(RS232_OpenComport(cport_nr, bdrate, mode, 0))
-//   {
-//     printf("Can not open comport\n");
-    
-//   }
- 
-//   usleep(200);  
-
-//   RS232_cputs(cport_nr, str_send[0]);
-
-//     usleep(2000000); 
-
-//   RS232_cputs(cport_nr, str_send[1]);
-//       usleep(2000000); 
+    this->pos_wheel_left = this->encoder_left * this->_radians_per_count;
+    this->pos_wheel_right = this->encoder_right * this->_radians_per_count;
 
 
-// RS232_cputs(cport_nr, str_send[2]);
+}
 
-// }

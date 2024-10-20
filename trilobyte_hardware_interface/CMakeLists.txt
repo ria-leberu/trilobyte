@@ -23,8 +23,11 @@ add_library(
   SHARED
   src/trilobyte_hardware_interface.cpp
   src/mcu_communication.cpp
-  src/rs232.c
+  include/trilobyte_hardware_interface/serial/serial.cc
+  include/trilobyte_hardware_interface/serial/unix.cc
+  include/trilobyte_hardware_interface/serial/list_ports_linux.cc
 )
+
 target_include_directories(
   ${PROJECT_NAME}
   PRIVATE

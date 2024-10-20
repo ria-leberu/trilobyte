@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
@@ -39,7 +40,7 @@ private:
   double left_velocity_ = 0;
   double right_velocity_ = 0;
 
-
+//diff_controller outputs in radians/sec
   double left_command_ = 0;
   double right_command_ = 0;
 
@@ -54,10 +55,7 @@ private:
   double wheel_radius_;
   double wheel_separation_;
 
-
-
-
-  MCUCommunication mcu;
+  MCUCommunication _mcu;
 
   // Store the command for the simulated robot
 

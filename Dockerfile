@@ -9,6 +9,7 @@ RUN apt-get update \
     vim \
     screen \
     python3-pip \
+    libboost-all-dev \
     ros-humble-demo-nodes-cpp \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
@@ -19,6 +20,7 @@ RUN apt-get update \
     ros-dev-tools \
     ros-humble-ament-* \
     && rm -rf /var/lib/apt/lists/*
+
 
 COPY requirements.txt ./
 
@@ -49,6 +51,7 @@ COPY trilobyte_description/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_descrip
 COPY trilobyte_hardware_interface/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_hardware_interface/
 COPY trilobyte/ /home/${USERNAME}/trilobyte_ws/src/trilobyte/
 
+# COPY serial/ /home/${USERNAME}/trilobyte_ws/src/serial/
 COPY ldlidar_stl_ros2/ /home/${USERNAME}/trilobyte_ws/src/ldlidar_stl_ros2/
 
 RUN cd home/${USERNAME}/trilobyte_ws \
