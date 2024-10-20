@@ -88,16 +88,15 @@ namespace trilobyte_hardware_interface
   _mcu.vel_wheel_left = (_mcu.pos_wheel_left - pos_previous_left) / diff_seconds;
   _mcu.vel_wheel_right = (_mcu.pos_wheel_right - pos_previous_right) / diff_seconds;
 
+  // RCLCPP_INFO(
+  // rclcpp::get_logger("TrilobyteControlSystem"), 
+  // "left: %f right: %f", 
+  // _mcu.vel_wheel_left, _mcu.vel_wheel_right);
 
   RCLCPP_INFO(
   rclcpp::get_logger("TrilobyteControlSystem"), 
-  "left: %f right: %f", 
-  _mcu.vel_wheel_left, _mcu.vel_wheel_right);
-
-  // RCLCPP_INFO(
-  // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "left: %d right: %d", 
-  // _mcu.encoder_left, _mcu.encoder_right);
+  "left: %d right: %d", 
+  _mcu.encoder_left, _mcu.encoder_right);
 
   // RCLCPP_INFO(
   // rclcpp::get_logger("TrilobyteControlSystem"), 
@@ -106,8 +105,8 @@ namespace trilobyte_hardware_interface
 
   //   RCLCPP_INFO(
   // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "time_current == %f", 
-  // time_current);
+  // "time_diff == %f", 
+  // diff_seconds);
 
   return hardware_interface::return_type::OK;
   }
@@ -122,16 +121,13 @@ namespace trilobyte_hardware_interface
 
   // RCLCPP_INFO(
   // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "LeftValue: %d RightValue: %d", 
-  // left_pwm, right_pwm);
-
+  // "LeftValue: %f RightValue: %f", 
+  // left_command_, right_command_);
 
   _mcu.send_motor_command(left_pwm, right_pwm);
 
   return hardware_interface::return_type::OK;
   }
-
-
 
 } // namespace my_robot_hardware_interface
 
