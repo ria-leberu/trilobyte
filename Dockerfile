@@ -16,6 +16,10 @@ RUN apt-get update \
     ros-humble-ament-cmake-clang-format \
     ros-humble-joint-state-publisher \
     ros-humble-robot-state-publisher \
+    ros-humble-navigation2 \
+    ros-humble-nav2-bringup \
+    ros-humble-robot-localization \
+    ros-humble-slam-toolbox \
     ros-humble-xacro \
     ros-dev-tools \
     ros-humble-ament-* \
