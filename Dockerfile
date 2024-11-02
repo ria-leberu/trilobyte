@@ -10,6 +10,7 @@ RUN apt-get update \
     screen \
     python3-pip \
     libboost-all-dev \
+    libyaml-cpp-dev \
     ros-humble-demo-nodes-cpp \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
@@ -55,8 +56,9 @@ COPY trilobyte_description/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_descrip
 COPY trilobyte_hardware_interface/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_hardware_interface/
 COPY trilobyte/ /home/${USERNAME}/trilobyte_ws/src/trilobyte/
 
-# COPY serial/ /home/${USERNAME}/trilobyte_ws/src/serial/
 COPY ldlidar_stl_ros2/ /home/${USERNAME}/trilobyte_ws/src/ldlidar_stl_ros2/
+# COPY robot_localization/ /home/${USERNAME}/trilobyte_ws/src/robot_localization/
+
 
 RUN cd home/${USERNAME}/trilobyte_ws \
     && . /opt/ros/humble/setup.sh \

@@ -61,6 +61,22 @@ def generate_launch_description():
             "controller_configuration.yaml",
         ]
     )
+    robot_localization_config = PathJoinSubstitution(
+    [
+        FindPackageShare("trilobyte_description"),
+        "config",
+        "ekf.yaml",
+    ]
+    )
+
+    amcl_config = PathJoinSubstitution(
+    [
+        FindPackageShare("trilobyte_description"),
+        "config",
+        "amcl.yaml",
+    ]
+    )
+
 
       # LDROBOT LiDAR publisher node
     ldlidar_node = Node(
@@ -79,7 +95,23 @@ def generate_launch_description():
         {'angle_crop_min': 135.0},
         {'angle_crop_max': 225.0}
       ]
-  )
+    )
+
+    amcl_node = Node(
+         package='nav2_amcl',
+            executable='amcl',
+            name='amcl',
+            output='screen',
+            parameters=[amcl_config],
+    )
+
+    robot_localization_node = Node(
+       package='robot_localization',
+       executable='ekf_node',
+       name='ekf_filter_node',
+       output='screen',
+       parameters=[robot_localization_config]
+    )
 
     control_node = Node(
         package="controller_manager",
@@ -119,9 +151,11 @@ def generate_launch_description():
 
     nodes = [
         ldlidar_node,
+        amcl_node,
         control_node,
         robot_state_pub_node,
         robot_controller_spawner,
+        robot_localization_node,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
     ]
 
