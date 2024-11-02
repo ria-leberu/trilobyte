@@ -11,4 +11,12 @@ To install, place into your ros2_ws/src folder.
 
 `docker build -t main .`
 
-`docker run -it --user ros -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env=DISPLAY --network=host --ipc=host -m=8g --device=/dev/ttyACM0 main`
+Raspberry Pi 5 
+`docker build -f Dockerfile.rpi -t rpi .`
+`docker run -it --user ros --network=host --ipc=host -m=8g --device=/dev/ttyACM0 rpi`
+
+
+Local PC 
+`docker build -f Dockerfile.local -t local .`
+`docker run -it --user ros -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env=DISPLAY --network=host --ipc=host local`
+
