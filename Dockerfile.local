@@ -1,17 +1,14 @@
 FROM ros:humble
-# FROM ros:humble-ros-base-jammy
 
-
-# installing programs
+# installing programs in a single RUN to reduce layers
 RUN apt-get update \
-    && apt-get install -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     nano \
     vim \
     screen \
     python3-pip \
     libboost-all-dev \
     libyaml-cpp-dev \
-    ros-humble-demo-nodes-cpp \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
     ros-humble-ament-cmake-clang-format \
@@ -22,54 +19,51 @@ RUN apt-get update \
     ros-humble-robot-localization \
     ros-humble-slam-toolbox \
     ros-humble-xacro \
+    ros-humble-rviz2 \
     ros-dev-tools \
     ros-humble-ament-* \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
-
+# Upgrade pip and install Python requirements in one step
 COPY requirements.txt ./
-
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
-# Create a non-root user
+# Create a non-root user and configure sudo
 ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 RUN groupadd --gid $USER_GID $USERNAME \
   && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-  && mkdir /home/$USERNAME/.config && chown $USER_UID:$USER_GID /home/$USERNAME/.config
+  && mkdir /home/$USERNAME/.config && chown $USER_UID:$USER_GID /home/$USERNAME/.config \
+  && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
+  && chmod 0440 /etc/sudoers.d/$USERNAME
 
-# Set up sudo
-RUN apt-get update \
-  && apt-get install -y sudo \
-  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
-  && chmod 0440 /etc/sudoers.d/$USERNAME \
-  && rm -rf /var/lib/apt/lists/*
+# Copy ROS workspace source files before building
+COPY trilobyte_base/ /home/$USERNAME/trilobyte_ws/src/trilobyte_base/
+COPY trilobyte_description/ /home/$USERNAME/trilobyte_ws/src/trilobyte_description/
+COPY trilobyte_hardware_interface/ /home/$USERNAME/trilobyte_ws/src/trilobyte_hardware_interface/
+COPY trilobyte/ /home/$USERNAME/trilobyte_ws/src/trilobyte/
+COPY ldlidar_stl_ros2/ /home/$USERNAME/trilobyte_ws/src/ldlidar_stl_ros2/
 
-# Make ROS2 workspace
-RUN mkdir -p home/${USERNAME}/trilobyte_ws/src
-
-COPY trilobyte_base/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_base/
-COPY trilobyte_description/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_description/
-COPY trilobyte_hardware_interface/ /home/${USERNAME}/trilobyte_ws/src/trilobyte_hardware_interface/
-COPY trilobyte/ /home/${USERNAME}/trilobyte_ws/src/trilobyte/
-
-COPY ldlidar_stl_ros2/ /home/${USERNAME}/trilobyte_ws/src/ldlidar_stl_ros2/
-# COPY robot_localization/ /home/${USERNAME}/trilobyte_ws/src/robot_localization/
-
-
-RUN cd home/${USERNAME}/trilobyte_ws \
+# Set up ROS2 workspace, install dependencies, and build
+RUN cd /home/$USERNAME/trilobyte_ws \
     && . /opt/ros/humble/setup.sh \
-    && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
+    && rosdep update && rosdep install --from-paths src --ignore-src --rosdistro humble -y \
     && colcon build
 
-RUN usermod -aG dialout ${USERNAME}
-# Copy the entrypoint and bashrc scripts so we have 
-# our container's environment set up correctly
-COPY entrypoint.sh /entrypoint.sh
-COPY bashrc /home/${USERNAME}/.bashrc
+# Add user to dialout group
+RUN usermod -aG dialout $USERNAME
 
+# Copy entrypoint and bashrc files
+COPY entrypoint.sh /entrypoint.sh
+COPY bashrc /home/$USERNAME/.bashrc
+
+# Set ownership for the workspace and .bashrc
+RUN chown -R $USER_UID:$USER_GID /home/$USERNAME/trilobyte_ws /home/$USERNAME/.bashrc
+
+# Set entrypoint
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["bash"]

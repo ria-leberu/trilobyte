@@ -9,7 +9,6 @@ RUN apt-get update \
     python3-pip \
     libboost-all-dev \
     libyaml-cpp-dev \
-    ros-humble-demo-nodes-cpp \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
     ros-humble-ament-cmake-clang-format \
