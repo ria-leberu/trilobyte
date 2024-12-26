@@ -47,7 +47,10 @@ RUN groupadd --gid $USER_GID $USERNAME \
 COPY trilobyte_base/ /home/$USERNAME/trilobyte_ws/src/trilobyte_base/
 COPY trilobyte_description/ /home/$USERNAME/trilobyte_ws/src/trilobyte_description/
 COPY trilobyte_hardware_interface/ /home/$USERNAME/trilobyte_ws/src/trilobyte_hardware_interface/
+COPY trilobyte_bringup/ /home/$USERNAME/trilobyte_ws/src/trilobyte_bringup/
+
 COPY trilobyte/ /home/$USERNAME/trilobyte_ws/src/trilobyte/
+
 COPY ldlidar_stl_ros2/ /home/$USERNAME/trilobyte_ws/src/ldlidar_stl_ros2/
 
 # Set up ROS2 workspace, install dependencies, and build
