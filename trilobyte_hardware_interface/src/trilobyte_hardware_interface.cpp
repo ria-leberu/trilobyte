@@ -82,19 +82,19 @@ namespace trilobyte_hardware_interface
   double dt = period.seconds();
 
   left_position_ += (left_encoder_ticks - prev_left_encoder_ticks_) * (2 * PI_VALUE / 500);
-  right_position_ += (right_encoder_ticks - prev_right_encoder_ticks_) * (2 * PI_VALUE / 250);
+  right_position_ += (right_encoder_ticks - prev_right_encoder_ticks_) * (2 * PI_VALUE / 500);
 
   left_velocity_ = ((left_encoder_ticks - prev_left_encoder_ticks_) * (2 * PI_VALUE / 500)) / dt;
-  right_velocity_ = ((right_encoder_ticks - prev_right_encoder_ticks_) * (2 * PI_VALUE / 250)) / dt;
+  right_velocity_ = ((right_encoder_ticks - prev_right_encoder_ticks_) * (2 * PI_VALUE / 500)) / dt;
 
   // Store current encoder values for next cycle
   prev_left_encoder_ticks_ = left_encoder_ticks;
   prev_right_encoder_ticks_ = right_encoder_ticks;
 
-  // RCLCPP_INFO(
-  // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "left: %f right: %f", 
-  // left_velocity_, right_velocity_);
+  RCLCPP_INFO(
+  rclcpp::get_logger("TrilobyteControlSystem"), 
+  "left: %f right: %f", 
+  left_velocity_, right_velocity_);
 
   // RCLCPP_INFO(
   // rclcpp::get_logger("TrilobyteControlSystem"), 

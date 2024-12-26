@@ -29,3 +29,11 @@ docker build -f Dockerfile.local -t local .
 docker run -it --user ros -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env=DISPLAY --network=host --ipc=host local
 ```
 
+  
+
+---
+
+
+```
+ros2 launch trilobyte_hardware_interface trilobyte_hardware_interface.launch.py
+```
