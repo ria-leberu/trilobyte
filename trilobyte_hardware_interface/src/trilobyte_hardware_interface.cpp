@@ -91,7 +91,7 @@ namespace trilobyte_hardware_interface
   prev_left_encoder_ticks_ = left_encoder_ticks;
   prev_right_encoder_ticks_ = right_encoder_ticks;
 
-  RCLCPP_INFO(
+  RCLCPP_DEBUG(
   rclcpp::get_logger("TrilobyteControlSystem"), 
   "left: %f right: %f", 
   left_velocity_, right_velocity_);

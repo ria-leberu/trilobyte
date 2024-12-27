@@ -14,12 +14,11 @@ To install, place into your ros2_ws/src folder.
 ### Raspberry Pi 5 
 
     docker build -f Dockerfile.rpi -t rpi .
-    docker run -it --user ros --network=host --ipc=host -m=8g --device=/dev/ttyACM0 --privileged rpi
+    docker run -it --user ros --network=host --ipc=host --privileged rpi
 
 __Commands__  
 
-    ros2 launch trilobyte_hardware_interface trilobyte_hardware_interface.launch.py
-
+    ros2 launch trilobyte_bringup trilobyte.launch.py
 
 
 ### Local PC 
