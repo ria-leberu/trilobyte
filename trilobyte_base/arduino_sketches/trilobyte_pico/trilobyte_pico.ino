@@ -168,14 +168,6 @@ void outputDataToPC() {
 
   sprintf(buffer, "<%06d%06d>", g_left_motor_count, g_right_motor_count);
   Serial.println(buffer);
-  // Serial.print("<");
-  // Serial.print(left_buffer);
-  // Serial.print(" ");
-  // Serial.print(right_buffer);
-  // Serial.println(">");
-  // Serial.print(g_left_motor_count);
-
-  // Serial.print(g_right_motor_count);
 }
 
 
