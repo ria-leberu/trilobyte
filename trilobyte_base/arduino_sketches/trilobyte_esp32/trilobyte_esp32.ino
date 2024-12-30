@@ -45,7 +45,8 @@ void loop() {
 
   rcvWithMarkers();
   processCommand();
-  // outputDataToPC();
+  outputDataToPC();
+
 }
 
 void rcvWithMarkers() {
@@ -80,25 +81,25 @@ void rcvWithMarkers() {
 
 void outputDataToPC() {
 
-  char buffer[14] = { 0 };
-  // sprintf(buffer, "<%06d%06d>", g_left_motor_count, g_right_motor_count);
-  uint16_t pos_lifter, pos_gripper, load_lifter, load_gripper;
+  char buffer[26] = { 0 };
+  uint16_t pos_lifter = 0;
+  uint16_t pos_gripper = 0;
+  uint16_t load_lifter = 0;
+  uint16_t load_gripper = 0;
 
-  // if (servo_controller.FeedBack(LIFTER) != -1) {
-  //   pos_lifter = servo_controller.ReadPos(LIFTER);
-  //   pos_gripper = servo_controller.ReadPos(GRIPPER);
+  if (servo_controller.FeedBack(0) != -1) {
+    pos_lifter = servo_controller.ReadPos(-1);
+    load_lifter = servo_controller.ReadLoad(-1);
+  }
+  if (servo_controller.FeedBack(1) != -1) {
+    pos_gripper = servo_controller.ReadPos(-1);
+    load_gripper = servo_controller.ReadLoad(-1);
+  }
 
-  //   sprintf(buffer, "<%06d%06d>", pos_lifter, pos_gripper);
-
-  // } else {
-  //   sprintf(buffer, "<0000000000000>");
-  // }
-  pos_lifter = servo_controller.ReadPos(LIFTER);
-  pos_gripper = servo_controller.ReadPos(GRIPPER);
-
-  sprintf(buffer, "<%06d%06d>", pos_lifter, pos_gripper);
+  sprintf(buffer, "<%05d%05d%05d%05d>", pos_lifter, pos_gripper, load_lifter, load_gripper);
 
   Serial.println(buffer);
+
 }
 
 
