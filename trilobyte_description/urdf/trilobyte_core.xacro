@@ -21,21 +21,22 @@
   <joint name="joint_base_lifter" type="revolute">
     <parent link="base_link" />
     <child link="lifter" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
     <limit effort="10.0" velocity="5.0" />
   </joint>
 
   <joint name="joint_lifter_gripper_left" type="revolute">
     <parent link="lifter" />
     <child link="gripper_left" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
     <limit effort="10.0" velocity="5.0" />
-
   </joint>
 
   <joint name="joint_lifter_gripper_right" type="revolute">
     <parent link="lifter" />
     <child link="gripper_right" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
     <limit effort="10.0" velocity="5.0" />
-
   </joint>
 
   <link name="lifter">
