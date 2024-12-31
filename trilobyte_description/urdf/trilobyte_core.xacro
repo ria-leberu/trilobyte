@@ -18,6 +18,40 @@
     </visual>
   </link>
 
+  <joint name="joint_base_lifter" type="revolute">
+    <parent link="base_link" />
+    <child link="lifter" />
+    <limit effort="10.0" velocity="5.0" />
+  </joint>
+
+  <joint name="joint_lifter_gripper_left" type="revolute">
+    <parent link="lifter" />
+    <child link="gripper_left" />
+    <limit effort="10.0" velocity="5.0" />
+
+  </joint>
+
+  <joint name="joint_lifter_gripper_right" type="revolute">
+    <parent link="lifter" />
+    <child link="gripper_right" />
+    <limit effort="10.0" velocity="5.0" />
+
+  </joint>
+
+  <link name="lifter">
+    <visual>
+      <origin xyz="0.0 0.0 0.02" rpy="0 0 1.57" />
+      <geometry>
+          <mesh filename="package://trilobyte_description/meshes/lifter.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="gripper_left">
+  </link>
+  <link name = "gripper_right">
+  </link>
+
   <!-- Left Wheel -->
   <link name="wheel_left">
     <visual>

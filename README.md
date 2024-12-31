@@ -24,10 +24,7 @@ __Commands__
 ### Local PC 
 
     docker build -f Dockerfile.local -t local .
-    docker run -it --user ros -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env=DISPLAY --network=host --ipc=host local
-
-
-
+    docker run -it --user ros -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /home/$USER/trilobyte/trilobyte_description/rviz:/home/$USER/trilobyte/trilobyte_description/rviz --env=DISPLAY --network=host --ipc=host local
 
 
 

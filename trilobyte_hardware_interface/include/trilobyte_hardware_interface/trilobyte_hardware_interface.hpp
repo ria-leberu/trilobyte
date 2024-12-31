@@ -58,7 +58,8 @@ private:
   double wheel_radius_;
   double wheel_separation_;
 
-  MCUCommunication _mcu;
+  MCUCommunication _pico;
+  MCUCommunication _esp;
 
   // Store the command for the simulated robot
 

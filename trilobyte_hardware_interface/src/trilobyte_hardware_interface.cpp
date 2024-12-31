@@ -24,11 +24,14 @@ namespace trilobyte_hardware_interface
     RCLCPP_INFO(
     rclcpp::get_logger("TrilobyteControlSystem"), "Starting Trilobyte Hardware Control . . . ");
 
-    std::string& device_name = info_.hardware_parameters["device"];
+    std::string& device_pico = info_.hardware_parameters["device_pico"];
+    std::string& device_esp = info_.hardware_parameters["device_esp"];
+
     uint32_t baud_rate = std::stoi(info_.hardware_parameters["baud_rate"]);
     uint16_t timeout_ms = std::stoi(info_.hardware_parameters["timeout"]);
 
-    _mcu.configure(device_name, baud_rate, timeout_ms);
+    _pico.configure(device_pico, baud_rate, timeout_ms);
+    _esp.configure(device_esp, baud_rate, timeout_ms);
 
     return hardware_interface::CallbackReturn::SUCCESS;
   }
@@ -75,7 +78,7 @@ namespace trilobyte_hardware_interface
   const rclcpp::Time& /*time*/, 
   const rclcpp::Duration& period) {
 
-  std::array<int,2> output_encoder = _mcu.read_encoder_values();
+  std::array<int,2> output_encoder = _pico.read_encoder_values();
   int left_encoder_ticks = output_encoder[0];
   int right_encoder_ticks = output_encoder[1];
 
@@ -96,25 +99,10 @@ namespace trilobyte_hardware_interface
   "left: %f right: %f", 
   left_velocity_, right_velocity_);
 
-  // RCLCPP_INFO(
-  // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "left: %d right: %d", 
-  // left_encoder_ticks, right_encoder_ticks);
-
-  // RCLCPP_INFO(
-  // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "left: %f right: %f", 
-  // _mcu.pos_wheel_left, _mcu.pos_wheel_right);
-
-  //   RCLCPP_INFO(
-  // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "time_diff == %f", 
-  // diff_seconds);
 
   return hardware_interface::return_type::OK;
   }
 
-  // write (core method) - updates the data values of the command_interfaces
   hardware_interface::return_type TrilobyteControlSystem::write(
   const rclcpp::Time& /*time*/, 
   const rclcpp::Duration& /*period*/)  {
@@ -122,12 +110,7 @@ namespace trilobyte_hardware_interface
   int16_t left_pwm = ((left_command_* 0.1885)/(2 * PI_VALUE) * 278);
   int16_t right_pwm = ((right_command_ * 0.1885)/(2 * PI_VALUE) * 278);
 
-  // RCLCPP_INFO(
-  // rclcpp::get_logger("TrilobyteControlSystem"), 
-  // "LeftValue: %f RightValue: %f", 
-  // left_command_, right_command_);
-
-  _mcu.send_motor_command(left_pwm, right_pwm);
+  _pico.send_motor_command(left_pwm, right_pwm);
 
   return hardware_interface::return_type::OK;
   }
