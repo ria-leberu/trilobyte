@@ -6,9 +6,7 @@
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "hardware_interface/lexical_casts.hpp"
-
 #include "rclcpp/rclcpp.hpp"
-
 #include "trilobyte_hardware_interface/trilobyte_hardware_interface.hpp"
 
 namespace trilobyte_hardware_interface

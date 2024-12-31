@@ -25,12 +25,12 @@
     <limit effort="10.0" velocity="5.0" />
   </joint>
 
-  <joint name="joint_lifter_gripper_left" type="revolute">
+  <!-- <joint name="joint_lifter_gripper_left" type="revolute">
     <parent link="lifter" />
     <child link="gripper_left" />
     <origin xyz="0 0 0" rpy="0 0 0" />
     <limit effort="10.0" velocity="5.0" />
-  </joint>
+  </joint> -->
 
   <joint name="joint_lifter_gripper_right" type="revolute">
     <parent link="lifter" />

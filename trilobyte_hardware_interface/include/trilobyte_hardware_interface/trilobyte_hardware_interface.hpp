@@ -23,7 +23,6 @@ class TrilobyteControlSystem : public hardware_interface::SystemInterface
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(TrilobyteControlSystem)
 
-
   // Core Methods
   hardware_interface::CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
@@ -38,6 +37,11 @@ public:
 
   int prev_left_encoder_ticks_ = 0;
   int prev_right_encoder_ticks_ = 0;
+
+  uint16_t lifter_position_ = 0;
+  uint16_t gripper_position = 0;
+  uint16_t lifter_load = 0;
+  uint16_t gripper_load = 0;
 
 private:
 
