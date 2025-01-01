@@ -27,9 +27,12 @@ class MCUCommunication {
         void configure(std::string device_name, uint32_t baud_rate, uint16_t timeout_ms);
 
         void send_motor_command(int16_t pwm_left_motor, int16_t pwm_right_motor);
+        void send_servo_command(uint16_t lifter_servo, uint16_t gripper_servo);
 
         std::array<int,2> read_encoder_values(void);
+        std::array<int,4> read_servo_values(void);
 
+        // check to see if you could remove this
         void update_wheel_positions(void);
 
         std::chrono::time_point<std::chrono::system_clock> time_previous;
@@ -57,6 +60,8 @@ class MCUCommunication {
         serial::Serial _serial_conn;
 
         std::string _convert_pwm_to_string(int16_t pwm_value);
+        std::string _convert_position_to_string(uint16_t servo_position);
+
 
 };
 

@@ -22,7 +22,18 @@
     <parent link="base_link" />
     <child link="lifter" />
     <origin xyz="0 0 0" rpy="0 0 0" />
-    <limit effort="10.0" velocity="5.0" />
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.0" upper="1.0" effort="1.0" velocity="1.0" />
+    <transmission name="joint_base_lifter_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="lifter_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+    <sensor name="sensor_lifter_load">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent>lifter</parent>
+    </sensor>
   </joint>
 
   <!-- <joint name="joint_lifter_gripper_left" type="revolute">
@@ -36,7 +47,18 @@
     <parent link="lifter" />
     <child link="gripper_right" />
     <origin xyz="0 0 0" rpy="0 0 0" />
-    <limit effort="10.0" velocity="5.0" />
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.0" upper="1.0" effort="1.0" velocity="1.0" />
+    <transmission name="joint_lifter_gripper_right_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="gripper_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+    <sensor name="sensor_gripper_load">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent>gripper_right</parent>
+    </sensor>
   </joint>
 
   <link name="lifter">
@@ -48,8 +70,8 @@
     </visual>
   </link>
 
-  <link name="gripper_left">
-  </link>
+  <!-- <link name="gripper_left">
+  </link> -->
   <link name = "gripper_right">
   </link>
 

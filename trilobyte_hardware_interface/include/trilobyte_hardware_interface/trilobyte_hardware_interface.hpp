@@ -38,18 +38,26 @@ public:
   int prev_left_encoder_ticks_ = 0;
   int prev_right_encoder_ticks_ = 0;
 
-  uint16_t lifter_position_ = 0;
-  uint16_t gripper_position = 0;
-  uint16_t lifter_load = 0;
-  uint16_t gripper_load = 0;
+  double lifter_position_ = 0;
+  double gripper_position_ = 0;
+  double lifter_load_ = 0;
+  double gripper_load_ = 0;
 
 private:
 
-
-
 //diff_controller outputs in radians/sec
+
+  double MAX_ANGLE_LIFTER = 0.8;
+  double MIN_ANGLE_LIFTER = -0.8;
+
+  double MAX_ANGLE_GRIPPER = 0.8;
+  double MIN_ANGLE_GRIPPER = -0.1;
+
   double left_command_ = 0;
   double right_command_ = 0;
+
+  double lifter_command_ = 0;
+  double gripper_command_ = 0;
 
   std::string left_wheel_name_;
   std::string right_wheel_name_;

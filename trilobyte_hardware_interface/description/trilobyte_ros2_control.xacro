@@ -42,7 +42,6 @@
             <param name="max">4095</param>
           </command_interface>
           <state_interface name="position"/>
-          <state_interface name="load"/>
         </joint>
         <joint name="joint_lifter_gripper_right">
           <command_interface name="position">
@@ -50,9 +49,8 @@
             <param name="max">4095</param>
           </command_interface>
           <state_interface name="position"/>
-          <state_interface name="load"/>
         </joint>
-        
+
         <!-- additional joints ...-->
         <!-- additional hardware/sensors ...-->
 

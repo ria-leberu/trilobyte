@@ -30,10 +30,19 @@ void MCUCommunication::send_motor_command(int16_t pwm_left_motor, int16_t pwm_ri
 
 }
 
+void MCUCommunication::send_servo_command(uint16_t lifter_servo, uint16_t gripper_servo) {
+
+    std::string buffer = this->LEFT_MARKER + MCUCommunication::_convert_position_to_string(lifter_servo) +
+    MCUCommunication::_convert_position_to_string(gripper_servo) + "10001000050050" + this->RIGHT_MARKER;
+
+    _serial_conn.flushOutput();
+    _serial_conn.write(buffer);
+
+}
+
 std::array<int,2> MCUCommunication::read_encoder_values(void) {
 
     std::array<int,2> output_encoder;
-
     _serial_conn.flushInput();
 
     if (_serial_conn.readline().size() > 0) {
@@ -49,6 +58,30 @@ std::array<int,2> MCUCommunication::read_encoder_values(void) {
     return output_encoder;
 
 }
+
+std::array<int,4> MCUCommunication::read_servo_values(void) {
+    std::array<int,4> output_servo_values;
+    _serial_conn.flushInput();
+
+    if (_serial_conn.readline().size() > 0) {
+        this->_response = _serial_conn.readline();
+    }
+
+    std::string lifter_position_str = this->_response.substr(1,5);
+    std::string gripper_position_str = this->_response.substr(6,10);
+    std::string lifter_load_str = this->_response.substr(11,15);
+    std::string gripper_load_str = this->_response.substr(16,20);
+
+
+    output_servo_values[0] = std::atoi(lifter_position_str.c_str());
+    output_servo_values[1] = std::atoi(gripper_position_str.c_str());
+    output_servo_values[2] = std::atoi(lifter_load_str.c_str());
+    output_servo_values[3] = std::atoi(gripper_load_str.c_str());
+
+    return output_servo_values;
+
+}
+
 
 std::string MCUCommunication::_convert_pwm_to_string(int16_t pwm_value) {
     
@@ -66,6 +99,17 @@ std::string MCUCommunication::_convert_pwm_to_string(int16_t pwm_value) {
 
     return pwm_command;
 }
+
+std::string MCUCommunication::_convert_position_to_string(uint16_t servo_position) {
+    std::string position_command;
+    std::ostringstream oss;
+
+    oss << std::setw(4) << std::setfill('0') << servo_position;
+    position_command = oss.str();
+
+    return position_command;
+}
+
 
 void MCUCommunication::update_wheel_positions(void) {
 

@@ -139,6 +139,12 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
+    servo_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["position_controllers", "--controller-manager", "/controller_manager"],
+    )
+
     robot_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -157,6 +163,7 @@ def generate_launch_description():
         # amcl_node,
         control_node,
         robot_state_pub_node,
+        servo_controller_spawner,
         robot_controller_spawner,
         # robot_localization_node,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
