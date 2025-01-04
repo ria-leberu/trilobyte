@@ -20,6 +20,8 @@ RUN apt-get update \
     ros-humble-slam-toolbox \
     ros-humble-xacro \
     ros-humble-rviz2 \
+    ros-humble-librealsense2* \
+    ros-humble-realsense2-camera \
     ros-humble-rqt-graph \
     ros-humble-tf2-ros \ 
     ros-humble-tf2-tools \

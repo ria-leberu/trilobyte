@@ -5,7 +5,8 @@ Hardware: Raspberry Pi Pico (RP2040), Raspberry Pi 5.
 
 Developed on ROS2 Humble on Ubuntu 22.04.
 
-To install, place into your ros2_ws/src folder.
+Install Hailo on Pi
+Configure Raspi-Config Interface Options, No to Serial Console, Yes to Serial Hardware
 
 ## Building and Running Docker Container
 
@@ -31,6 +32,10 @@ __Commands__
     ros2 launch trilobyte_description rviz.launch.py
 
 
+__Works but color not showing__
+
+ros2 run realsense2_camera realsense2_camera_node --ros-args -p pointcloud.enable:=true
 
 
 
+ros2 launch realsense2_camera rs_launch.py pointcloud.enable:=true align_depth:=true
