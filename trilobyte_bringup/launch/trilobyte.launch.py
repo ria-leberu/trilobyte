@@ -160,12 +160,12 @@ def generate_launch_description():
 
     nodes = [
         ldlidar_node,
-        # amcl_node,
+        amcl_node,
         control_node,
         robot_state_pub_node,
         servo_controller_spawner,
         robot_controller_spawner,
-        # robot_localization_node,
+        robot_localization_node,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
     ]
     
