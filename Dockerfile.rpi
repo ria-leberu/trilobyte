@@ -19,12 +19,14 @@ RUN apt-get update \
     ros-humble-nav2-bringup \
     ros-humble-robot-localization \
     ros-humble-slam-toolbox \
-    ros-humble-librealsense2* \
-    ros-humble-realsense2-camera \
     ros-humble-rtabmap-ros \
     ros-humble-xacro \
     ros-dev-tools \
     ros-humble-ament-* \
+    imx500-all \
+    imx500-tools \
+    python3-opencv \
+    python3-munkres \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
@@ -32,6 +34,10 @@ RUN apt-get update \
 COPY requirements.txt ./
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
+
+RUN git clone -b next https://github.com/raspberrypi/picamera2
+RUN cd picamera2
+RUN pip install -e .  --break-system-packages
 
 # Create a non-root user and configure sudo
 ARG USERNAME=ros
@@ -44,11 +50,14 @@ RUN groupadd --gid $USER_GID $USERNAME \
   && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME
 
+RUN usermod -aG video $USERNAME
+
 # Copy ROS workspace source files before building
 COPY trilobyte_base/ /home/$USERNAME/trilobyte_ws/src/trilobyte_base/
 COPY trilobyte_description/ /home/$USERNAME/trilobyte_ws/src/trilobyte_description/
 COPY trilobyte_hardware_interface/ /home/$USERNAME/trilobyte_ws/src/trilobyte_hardware_interface/
 COPY trilobyte_bringup/ /home/$USERNAME/trilobyte_ws/src/trilobyte_bringup/
+COPY raspberrypi_ai_camera_ros2 / /home/$USERNAME/trilobyte_ws/src/raspberrypi_ai_camera_ros2/
 
 COPY trilobyte/ /home/$USERNAME/trilobyte_ws/src/trilobyte/
 
