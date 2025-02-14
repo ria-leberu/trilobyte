@@ -6,7 +6,10 @@ Hardware: Raspberry Pi Pico (RP2040), Raspberry Pi 5.
 Developed on ROS2 Humble on Ubuntu 22.04.
 
 Install Hailo on Pi
-Configure Raspi-Config Interface Options, No to Serial Console, Yes to Serial Hardware
+
+## For the RPLidar to work through GPIO
+    Configure Raspi-Config Interface Options, 
+    No to Serial Console, Yes to Serial Hardware
 
 ## Building and Running Docker Container
 

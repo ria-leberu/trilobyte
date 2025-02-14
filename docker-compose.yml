@@ -1,0 +1,14 @@
+# Ubuntu ROS Container
+services:
+  rpi-container:
+    build:
+      context: .
+      dockerfile: Dockerfile.rpi
+    image: rpi
+    container_name: rpi-container
+    network_mode: "host"
+    ipc: "host"
+    privileged: true
+    user: "ros"
+    stdin_open: true
+    tty: true

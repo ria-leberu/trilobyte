@@ -23,10 +23,10 @@ RUN apt-get update \
     ros-humble-xacro \
     ros-dev-tools \
     ros-humble-ament-* \
-    imx500-all \
-    imx500-tools \
-    python3-opencv \
-    python3-munkres \
+    # imx500-all \
+    # imx500-tools \
+    # python3-opencv \
+    # python3-munkres \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
@@ -35,9 +35,9 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
-RUN git clone -b next https://github.com/raspberrypi/picamera2
-RUN cd picamera2
-RUN pip install -e .  --break-system-packages
+# RUN git clone -b next https://github.com/raspberrypi/picamera2
+# RUN cd picamera2
+# RUN pip install -e .  --break-system-packages
 
 # Create a non-root user and configure sudo
 ARG USERNAME=ros
@@ -57,7 +57,7 @@ COPY trilobyte_base/ /home/$USERNAME/trilobyte_ws/src/trilobyte_base/
 COPY trilobyte_description/ /home/$USERNAME/trilobyte_ws/src/trilobyte_description/
 COPY trilobyte_hardware_interface/ /home/$USERNAME/trilobyte_ws/src/trilobyte_hardware_interface/
 COPY trilobyte_bringup/ /home/$USERNAME/trilobyte_ws/src/trilobyte_bringup/
-COPY raspberrypi_ai_camera_ros2 / /home/$USERNAME/trilobyte_ws/src/raspberrypi_ai_camera_ros2/
+# COPY raspberrypi_ai_camera_ros2 / /home/$USERNAME/trilobyte_ws/src/raspberrypi_ai_camera_ros2/
 
 COPY trilobyte/ /home/$USERNAME/trilobyte_ws/src/trilobyte/
 
